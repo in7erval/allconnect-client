@@ -3,10 +3,10 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-    font-size: 15px;
+    font-size: 1rem;
     padding: 0.5rem 1.5rem;
     background-color: white;
-    border-top: 10px solid #dddddd;
+    border-top: 5px solid #dddddd;
     max-height: 260px;
     overflow-y: auto;
 }
@@ -30,10 +30,17 @@
 }
 
 .name {
-    font-size: 13px;
-    font-weight: 700;
+    font-size: 0.75rem;
+    font-weight: bold;
     display: block;
     margin-bottom: 0.25rem;
+    color: #000000;
+}
+
+
+.name:hover {
+    cursor: pointer;
+    color: #00000099;
 }
 
 /** */
@@ -56,13 +63,13 @@
 
 p.from_me {
     align-self: flex-end;
-    background-color: #248bf5;
-    color: #fff;
+    background-color: #ddddff;
+    color: black;
 }
 
 p.from_me::before {
     border-bottom-left-radius: 0.8rem 0.7rem;
-    border-right: 1rem solid #248bf5;
+    border-right: 1rem solid #ddddff;
     right: -0.35rem;
     transform: translate(0, -0.1rem);
 }
@@ -71,7 +78,7 @@ p.from_me::after {
     background-color: white;
     border-bottom-left-radius: 0.5rem;
     right: -40px;
-    transform:translate(-30px, -2px);
+    transform: translate(-30px, -2px);
     width: 10px;
 }
 
@@ -136,4 +143,64 @@ p[class^="from_"].emoji::before {
 
 .margin-t_one {
     margin-top: 1rem !important;
+}
+
+.comment__msg {
+    width: 100%;
+    padding: 5px 10px;
+    background: #eeeeee;
+    border-top: 3px solid #eeeeee;
+    display: flex;
+    align-items: flex-end;
+}
+
+.comment__msg textarea {
+    padding: 10px 20px;
+    font-family: "Roboto", sans-serif;
+    width: 100%;
+    font-size: 1rem;
+    border: none;
+    border-radius: 10px;
+    outline: none;
+    background-color: #cccccc;
+    resize: none;
+}
+
+.comment__msg textarea:focus {
+    background-color: #dddddd;
+}
+
+.comment__msg img {
+    width: 30px;
+    margin: 5px;
+    background-color: #be961e;
+    padding: 7px;
+    border-radius: 50%;
+    filter: invert(100%);
+}
+
+.comment__msg_img {
+    min-height: 50px;
+    display: flex;
+    align-items: flex-end;
+}
+
+.comment__msg_img:hover img {
+    animation-duration: 1s;
+    animation-timing-function: ease-in-out;
+    animation-name: slidetop;
+    animation-iteration-count: 1;
+    cursor: pointer;
+}
+
+@keyframes slidetop {
+    0% {
+        margin-bottom: 5px;
+    }
+    50% {
+        margin-bottom: 12px;
+    }
+    100% {
+        margin-bottom: 5px;
+    }
 }

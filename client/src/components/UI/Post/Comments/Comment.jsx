@@ -1,15 +1,15 @@
-import React from 'react';
+import React, {useState} from 'react';
 import cl from './Comment.module.css';
 
 const Comment = ({pic, ownerId, firstName, lastName, message}) => {
 
-	/* fixme: DELETE random(). fix on det continious comms */
-	const tail = ((Math.random() > 0.5) ? "" : (" " + cl.no_tail));
-
 	const currentUserId = localStorage.getItem('userId');
 
+	/* fixme: DELETE random(). fix on det continious comms */
+	const [tail, setTail] = useState(((Math.random() > 0.5) ? "" : (" " + cl.no_tail)));
 	/* fixme: delete random */
-	const isCurrentUserComment = Math.random() > 0.5 || ownerId === currentUserId;
+
+	const isCurrentUserComment = ownerId === currentUserId;
 
 	let commentClass = isCurrentUserComment ? cl.from_me : cl.from_them;
 
@@ -17,7 +17,7 @@ const Comment = ({pic, ownerId, firstName, lastName, message}) => {
 		<div className={cl.comment + tail + " " + commentClass}>
 			{!isCurrentUserComment && <img src={pic} alt={"comment owner"}/>}
 			<p className={commentClass}>
-				<span className={cl.name}>{firstName + " " + lastName}</span>
+				<a className={cl.name} href={`/user${ownerId}`}>{firstName + " " + lastName}</a>
 				{message}
 			</p>
 		</div>

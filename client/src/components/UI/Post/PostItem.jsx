@@ -1,67 +1,38 @@
-import React, {useEffect, useState} from 'react';
-import MyButton from "./UI/button/MyButton";
-import {Link, useNavigate} from "react-router-dom";
-import {useFetching} from "../hooks/useFetching";
-import PostService from "../API/PostService";
-import {getPageCount} from "../utils/pages";
-import Loader from "./UI/Loader/Loader";
+import React, {useState} from 'react';
 import Comments from "./Comments/Comments.jsx";
+import cl from "./Post.module.css";
 
 const PostItem = (props) => {
 
-		// const navigate = useNavigate();
-		const [comments, setComments] = useState([]);
 		const [showComments, setShowComments] = useState(false);
-		const [showImage, setShowImage] = useState(1);
-
-		// console.log('post', props.post);
-
-		const [fetchComments, isCommentsLoading, commentsError] = useFetching(async () => {
-			let response = await PostService.getCommentsByPostId(props.post.id);
-
-			// console.log("commentsNew", commentsNew);
-			setComments(response);
-		});
-
-		useEffect(() => {
-			fetchComments();
-		}, []);
+		const [showImage, setShowImage] = useState(Math.random > 0.5);
 
 		// console.log('comms', comments);
 
-		return (<div className="post">
-				<a href={`/user${props.post.owner.id}`}>
-					<div className="post__owner">
+		return (<div className={cl.post}>
+				<a href={`/user${props.post.owner._id}`}>
+					<div className={cl.post__owner}>
 						<img src={props.post.owner.picture} alt="owner"/>
 						<p>
 							{`${props.post.owner.firstName} ${props.post.owner.lastName}`}
 						</p>
 					</div>
 				</a>
-				{isCommentsLoading ?
-					(<div className="post__content" style={{
-						display: "flex",
-						justifyContent: 'center',
-						marginTop: 50
-					}}>
-						<Loader/>
-					</div>)
-					: (
+				<div>
+					<div className={cl.post__publish_date}>
+						{new Date(props.post.publishDate).toLocaleString()}
+					</div>
+					<div className={cl.post__content}>
+						{/** FIXME: delete showImage! */}
+						{showImage && <img src={props.post.image} alt="Pic"/>}
 						<div>
-							<div className="post__publish-date">
-								{new Date(props.post.publishDate).toLocaleString()}
-							</div>
-							<div className="post__content">
-								{/** FIXME: delete showImage! */}
-								{showImage && <img src={props.post.image} alt="Pic"/>}
-								<div>
-									{props.post.text}
-								</div>
-							</div>
+							{props.post.text}
 						</div>
-					)}
-				{showComments && comments.length !== 0 && <Comments comments={comments}/>}
-				<div className="post__btns"
+					</div>
+				</div>
+
+				{showComments && <Comments comments={props.post.comments} postId={props.post._id}/>}
+				<div className={cl.post__btns}
 						 onClick={() => setShowComments(!showComments)}>
 					{/*<MyButton onClick={() => props.remove(props.post)}>*/}
 					{/*	Удалить*/}
@@ -86,7 +57,7 @@ const PostItem = (props) => {
 								d="M5 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
 						</svg>
 						<div style={{marginLeft: '5px'}}>
-							{comments.length}
+							{props.post.comments.length}
 						</div>
 					</div>
 				</div>
