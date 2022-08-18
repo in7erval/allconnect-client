@@ -78,20 +78,82 @@
 .post__btns {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
+    border: none;
+    font-size: 0.9rem;
+    font-family: "Roboto", sans-serif;
     width: 100%;
-    background-color: #00000011;
-    padding: 10px;
+    background-color: #e1e1e1;
+    padding: 5px;
 }
 
-.post__btns:hover {
-    cursor: pointer;
-    background-color: #00000033;
-}
-
-.post__btns div {
+.post__btns button {
     margin: 2px 10px;
+    border: none;
+    display: flex;
+    align-items: center;
+    font-family: "Roboto", sans-serif;
+    font-size: 0.9rem;
+    padding: 5px 10px;
+    border-radius: 10px;
+}
+
+.post__btns > button {
+    background-color: inherit;
+}
+
+.post__btns__like svg {
+    fill: red;
+}
+
+.post__btns button:hover {
+    cursor: pointer;
+}
+
+.post__btns__like_comment {
+    display: flex;
+}
+
+.post__btns__like_comment button:hover {
+    background-color: white;
+}
+
+.post__btns_btn_delete:hover {
+    background-color: #cc9999;
+}
+
+
+.post__btns__like:hover .heart_fill {
+    animation-name: heart-beat;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+}
+
+.pause:hover .heart_fill {
+    animation-play-state: paused;
+}
+
+.bi_heart_fill_color {
+    color: red
+}
+
+@keyframes heart-beat {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.3);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.pause {
+    animation-play-state: paused;
 }
 
 /**

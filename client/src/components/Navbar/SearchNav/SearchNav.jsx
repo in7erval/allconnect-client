@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import cl from "./SearchNav.module.css";
-import UserService from "../../../../API/UserService";
-import {parseError} from "../../../../store/errorReducer";
+import UserService from "../../../API/UserService";
+import {parseError} from "../../../store/errorReducer";
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
 

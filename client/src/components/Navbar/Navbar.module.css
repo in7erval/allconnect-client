@@ -55,7 +55,7 @@ a:hover {
     align-items: center;
 }
 
-.navbar__links div {
+.navbar__links a {
     cursor: pointer;
 }
 

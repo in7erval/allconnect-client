@@ -24,9 +24,11 @@
 
 .comment > img {
     width: 30px;
+    height: 30px;
     border-radius: 50%;
     margin-right: 10px;
     align-self: end;
+    object-fit: cover;
 }
 
 .name {
@@ -183,6 +185,8 @@ p[class^="from_"].emoji::before {
     min-height: 50px;
     display: flex;
     align-items: flex-end;
+    border: none;
+    background-color: #eeeeee;
 }
 
 .comment__msg_img:hover img {

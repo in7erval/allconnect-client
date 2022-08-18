@@ -1,12 +1,12 @@
 import React, {useContext, useState} from 'react';
 import {Link} from "react-router-dom";
-import {AuthContext} from "../../../context";
+import {AuthContext} from "../../context";
 import Logo from "./Logo/Logo";
 import SearchNav from "./SearchNav/SearchNav";
 import cl from "./Navbar.module.css";
 import LinksNav from "./LinksNav/LinksNav";
-import AsideNav from "../../AsideNav/AsideNav";
-import MyModal from "../MyModal/MyModal";
+import AsideNav from "../AsideNav/AsideNav";
+import MyModal from "../UI/MyModal/MyModal";
 
 const Navbar = () => {
 
@@ -30,7 +30,7 @@ const Navbar = () => {
 				</div>
 
 				<div className={cl.navbar__links}>
-					<div className={cl.navbar_link} onClick={logout}>Выйти</div>
+					<a className={cl.navbar_link} onClick={logout}>Выйти</a>
 				</div>
 
 				<MyModal visible={showMenu} setVisible={setShowMenu}
