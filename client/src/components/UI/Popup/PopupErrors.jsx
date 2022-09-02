@@ -1,21 +1,22 @@
 import cl from "./Popup.module.css";
-import {useDispatch} from "react-redux";
-import {deleteError} from "../../../store/errorReducer";
-import PropTypes from "prop-types";
+import {useContext} from "react";
+import {Context} from "../../../index";
+import {observer} from "mobx-react-lite";
 
-const Popup = ({errors}) => {
+const PopupErrors = () => {
 
-	const dispatch = useDispatch();
-	console.log("error in popup", errors);
+	const {store} = useContext(Context);
+
+	console.log("errors in popup", store.errors);
 
 	const deleteError_ = (key) => {
 		console.log(key);
-		dispatch(deleteError(key));
+		store.deleteError(key);
 	}
 
-	return errors && (
+	return store.errors && (
 		<div className={cl.popups}>
-			{errors.map((element, index) =>
+			{store.errors.map((element, index) =>
 				(
 					<div key={index} className={cl.popup} onClick={_event => deleteError_(index)}>
 						<p className={cl.helper}>X</p>
@@ -30,8 +31,4 @@ const Popup = ({errors}) => {
 	);
 };
 
-Popup.propTypes = {
-	errors: PropTypes.array.isRequired
-}
-
-export default Popup;
+export default observer(PopupErrors);
