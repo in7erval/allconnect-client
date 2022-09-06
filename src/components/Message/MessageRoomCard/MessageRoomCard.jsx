@@ -13,7 +13,7 @@ const MessageRoomCard = ({user, id, messagePreview, messageTime, isUnread}) => {
 		messageTime = (new Date(messageTime)).toLocaleTimeString([], {timeStyle: 'short'});
 	}
 
-	const classname = cl.message_card + (isUnread ? ` ${cl.unread} ` : "") + (messagePreview ? "" : cl.no_messages);
+	const classname = cl.message_card + (isUnread ? ` ${cl.unread} ` : " ") + (messagePreview ? "" : cl.no_messages);
 
 	return (
 		<div className={classname} key={id}>
