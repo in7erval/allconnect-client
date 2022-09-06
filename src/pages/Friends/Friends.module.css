@@ -5,6 +5,11 @@
     max-width: 600px;
 }
 
+.friends a {
+    text-decoration: none;
+    color: black;
+}
+
 .main {
     flex: 1 1 0;
     width: 75%;

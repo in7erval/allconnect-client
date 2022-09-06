@@ -13,55 +13,17 @@
     display: flex;
     flex-direction: column;
     margin: 0 20px 50px 0;
+    padding: 15px;
+    justify-content: center;
+    background-color: white;
+    border-radius: 5px;
 }
 
 .user_pic {
-    padding: 15px;
-    background-color: white;
-    border-top-right-radius: 5px;
-    border-top-left-radius: 5px;
-    min-width: 230px;
-    min-height: 200px;
-}
-
-
-.user_pic_btns {
     display: flex;
-    flex-direction: column;
-    background-color: white;
-    border-bottom-right-radius: 5px;
-    border-bottom-left-radius: 5px;
-    border: none;
-}
-
-.user_pic_btns button {
-    padding: 10px;
-    text-align: center;
-    background-color: #248bf588;
-    border: none;
-    font-size: 0.9rem;
-    font-family: "Roboto", sans-serif;
-}
-
-.user_pic_btns button:last-child {
-    border-bottom-right-radius: 5px;
-    border-bottom-left-radius: 5px;
-}
-
-.user_pic_btns button:hover {
-    background-color: #248bf5dd;
-    cursor: pointer;
-    box-shadow: rgb(50 50 255 / 55%) 0 6px 20px;
-}
-
-.user_pic_btns .danger {
-    background-color: #CC889988;
-}
-
-.user_pic_btns .danger:hover {
-    background-color: #CC8899dd;
-    cursor: pointer;
-    box-shadow: rgb(204 136 153 / 55%) 0 6px 20px;
+    justify-content: center;
+    margin-bottom: 10px;
+    background-color: #dddddd;
 }
 
 .user_pic img {
@@ -74,6 +36,62 @@
     background-color: #eeeeee;
     object-fit: cover;
     /*padding: 10px;*/
+}
+
+
+.user_pic_btns {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border: none;
+}
+
+.user_pic_btns div, .user_pic_btns button {
+    padding: 5px;
+    height: 30px;
+    text-align: center;
+    background-color: #5181b8;
+    color: white;
+    border: none;
+    font-family: "Roboto", sans-serif;
+    border-radius: 8px;
+    font-size: 13px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user_pic_btns div a {
+    color: white;
+}
+
+.user_pic_btns button:hover, .user_pic_btns div:hover {
+    background-color: #6690c0;
+    box-shadow: rgb(102 144 192 / 55%) 0 6px 20px;
+    cursor: pointer;
+
+}
+
+.user_pic_btns .danger {
+    background-color: #CC889988;
+    color: black;
+}
+
+.user_pic_btns .danger:hover {
+    background-color: #CC8899dd;
+    cursor: pointer;
+    box-shadow: rgb(204 136 153 / 55%) 0 6px 20px;
+}
+
+.user_pic_btns .user_button {
+    color: #65768a;
+    background-color: #e5ebf1;
+}
+
+.user_pic_btns .user_button:hover {
+    background-color: #dae2ea;
+    box-shadow: rgb(218 226 234 / 55%) 0 6px 20px;
 }
 
 .user_page__info_stats {
@@ -93,12 +111,12 @@
     max-width: 600px;
 }
 
-.user_page__info h1 {
-    margin-bottom: 20px;
+.user_page__info h2 {
+    margin-bottom: 10px;
 }
 
 .user_page__info input {
-    font-size: 2em;
+    font-size: 1.5em;
     font-weight: bold;
     border: none;
     padding: 5px 10px;
@@ -129,12 +147,45 @@
 .user_page__stats {
     background-color: white;
     border-radius: 5px;
-    padding: 20px;
+    padding: 10px;
     flex: 1;
-    min-width: 300px;
+    min-width: 200px;
     margin-bottom: 0;
     max-width: 600px;
+    max-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
+
+.user_page__stats a {
+    height: 50px;
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 50px;
+    cursor: pointer;
+}
+
+.user_page__stats a:last-child {
+    margin-right: 0;
+}
+
+.user_page__stats div {
+    font-size: 1.5rem;
+    color: #2a5885;
+}
+
+.user_page__stats p {
+    color: gray;
+    font-size: 0.9rem;
+}
+
+.user_page__stats .disabled_link {
+    cursor: default;
+}
+
 
 .user_page__friends {
     margin-right: 20px;
@@ -147,7 +198,9 @@
     flex-direction: column;
 }
 
-
+.user_page__friends > a {
+    color: black;
+}
 
 .user_page__friends_header {
     display: flex;
@@ -227,7 +280,7 @@
     border: none;
 }
 
-.user_page__posts_header {
+.user_page__posts_form {
     display: flex;
     flex-direction: column;
     background-color: #dddddd;
@@ -236,12 +289,18 @@
     max-width: 600px;
 }
 
-.user_page__posts_header > div {
+.user_page__posts_header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     height: 40px;
     padding: 0 20px;
     font-weight: bold;
+    background-color: white;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    border-bottom: 1px solid lightgray;
+    max-width: 600px;
+    margin-bottom: 5px;
 }
 

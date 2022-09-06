@@ -4,7 +4,6 @@ import Loader from "../../components/UI/Loader/Loader";
 import UserService from "../../API/UserService";
 import PostList from "../../components/Post/PostList";
 import userpic from "../../assets/userpic.jpeg";
-import FlexibleInput from "../../components/UI/FlexibleInput/FlexibleInput.jsx";
 import cl from "./UserPage.module.css";
 import MyModal from "../../components/UI/MyModal/MyModal";
 import ImageUploader from "../../components/UI/ImageUploader/ImageUploader";
@@ -19,6 +18,9 @@ const determineIsFriend = (userFriendsId, friendId) => {
 	return userFriendsId.map(element => element._id).includes(friendId);
 }
 
+const createRoomId = (firstId, secondId) => firstId > secondId ? `${firstId}:${secondId}` : `${secondId}:${firstId}`;
+
+
 const UserPage = () => {
 		const LIMIT_POSTS = 10;
 		const pageUserId = useParams().id;
@@ -29,8 +31,8 @@ const UserPage = () => {
 		const [isFriend, setIsFriend] = useState(false);
 		const {ref: lastElement, inView} = useInView();
 		const [showImageUploader, setShowImageUploader] = useState(false);
-		const [editedFirstName, setEditedFirstName] = useState("");
-		const [editedLastName, setEditedLastName] = useState("");
+		// const [editedFirstName, setEditedFirstName] = useState("");
+		// const [editedLastName, setEditedLastName] = useState("");
 
 		const addFriend = async () => {
 			await UserService.addFriend(loggedUserId, pageUserId)
@@ -58,14 +60,14 @@ const UserPage = () => {
 		} = useQuery([`user${pageUserId}`], fetchUser);
 
 		useEffect(() => {
-			if (!isFetching) {
-				if (!isOwner) {
-					setIsFriend(determineIsFriend(userResponse.data.friends, loggedUserId));
-				} else {
-					setEditedFirstName(userResponse.data.firstName);
-					setEditedLastName(userResponse.data.lastName);
-				}
+			if (!isFetching && !isOwner) {
+				setIsFriend(determineIsFriend(userResponse.data.friends, loggedUserId));
 			}
+			// else {
+			// 	setEditedFirstName(userResponse.data.firstName);
+			// 	setEditedLastName(userResponse.data.lastName);
+			// }
+			// }
 		}, [isFetching]);
 
 		const fetchPosts = ({pageParam: pageParameter = 1}) => {
@@ -98,19 +100,19 @@ const UserPage = () => {
 		}, [inView]);
 
 
-		const changeName = async (event_) => {
-			event_.preventDefault();
-			await UserService.changeName(loggedUserId, editedFirstName, editedLastName)
-				.then(() => console.debug("name changed successfully"))
-				.catch(error => store.addError(error));
-		};
+		// const changeName = async (event_) => {
+		// 	event_.preventDefault();
+		// 	await UserService.changeName(loggedUserId, editedFirstName, editedLastName)
+		// 		.then(() => console.debug("name changed successfully"))
+		// 		.catch(error => store.addError(error));
+		// };
 
 		const indexForFriendsArray = showAllFriends ? undefined : 6;
 
 		/* todo: fix loader */
 		return (
 			<div className={cl.user_page + " justify-content-start"}>
-				{isLoadingUser ?
+				{isLoadingUser || isLoadingPosts ?
 					<Loader/> : (
 						<div className={cl.user_page__pic_name}>
 							<div className={cl.user_page__pic_and_btns}>
@@ -119,10 +121,16 @@ const UserPage = () => {
 								</div>
 								<div className={cl.user_pic_btns}>
 									{isOwner &&
-										<button onClick={() => setShowImageUploader(true)}>
+										<button onClick={() => setShowImageUploader(true)} className={cl.user_button}>
 											Загрузить фото
 										</button>
 									}
+									{!isOwner &&
+										<div>
+											<Link to={`/messages/${createRoomId(pageUserId, loggedUserId)}`}>
+												Написать сообщение
+											</Link>
+										</div>}
 									{!isOwner && (!isFriend ?
 										(<button onClick={addFriend}>
 											Добавить в друзья
@@ -139,28 +147,38 @@ const UserPage = () => {
 										<div style={{marginRight: -15, marginTop: -15, height: 20, alignSelf: "flex-end"}}>
 											<Status userId={pageUserId}/>
 										</div>
+										<h2>{userResponse.data.lastName} {userResponse.data.firstName}</h2>
 
-										{isOwner ? (
-												<form onSubmit={changeName}>
-													<FlexibleInput
-														content={editedLastName}
-														onChange={event_ => setEditedLastName(event_.target.value)}
-													/>
-													<FlexibleInput
-														content={editedFirstName}
-														onChange={event_ => setEditedFirstName(event_.target.value)}
-													/>
-													<button type="submit" hidden/>
-												</form>
-											) :
-											(<h1>{userResponse.data.lastName} {userResponse.data.firstName}</h1>)
-										}
+										{/* fixme: Убрал редактирование имени, сделать отдельную страницу*/}
+										{/*{isOwner ? (*/}
+										{/*		<form onSubmit={changeName}>*/}
+										{/*			<FlexibleInput*/}
+										{/*				content={editedLastName}*/}
+										{/*				onChange={event_ => setEditedLastName(event_.target.value)}*/}
+										{/*			/>*/}
+										{/*			<FlexibleInput*/}
+										{/*				content={editedFirstName}*/}
+										{/*				onChange={event_ => setEditedFirstName(event_.target.value)}*/}
+										{/*			/>*/}
+										{/*			<button type="submit" hidden/>*/}
+										{/*		</form>*/}
+										{/*	) :*/}
+										{/*	(<h2>{userResponse.data.lastName} {userResponse.data.firstName}</h2>)*/}
+										{/*}*/}
 
 									</div>
-									<hr/>
+									<div style={{backgroundColor: "lightgray", width: "100%", height: 1}}></div>
+									<p style={{fontSize: "0.9rem", color: "gray"}}>Информация отсутствует</p>
 								</div>
 								<div className={cl.user_page__stats}>
-									Заготовка для статистики
+									<Link to={`/friends/${isOwner ? "" : pageUserId}`}>
+										<div>{userResponse.data?.friends?.length}</div>
+										<p>друзей</p>
+									</Link>
+									<Link to="#" aria-disabled={true} className={cl.disabled_link}>
+										<div>{postsData.pages[0].data.count}</div>
+										<p>записей</p>
+									</Link>
 								</div>
 							</div>
 						</div>
@@ -204,25 +222,26 @@ const UserPage = () => {
 							</div>
 						)}
 
+
 					<div style={{flex: 5}}>
-						<div className={cl.user_page__posts_header}>
-							<div>
-								<p>Посты</p>
-								<p>{isLoadingPosts ? "загрузка..." : postsData.pages[0].data.count}</p>
+						{isOwner &&
+							<div className={cl.user_page__posts_form}>
+								<PostForm/>
 							</div>
-							{isOwner && <PostForm/>}
+						}
+						<div className={cl.user_page__posts_header}>
+							<p>Посты</p>
+							<p>{isLoadingPosts ? "загрузка..." : postsData.pages[0].data.count}</p>
 						</div>
-						<div>
-							{isLoadingPosts ? <Loader/> : postsData.pages.map((group, index) => (
-								<React.Fragment key={index}>
-									<PostList
-										remove={() => console.log("remove")}
-										posts={group.data.body}
-									/>
-								</React.Fragment>
-							))}
-							<div ref={lastElement} style={{height: 20}}/>
-						</div>
+						{isLoadingPosts ? <Loader/> : postsData.pages.map((group, index) => (
+							<React.Fragment key={index}>
+								<PostList
+									remove={() => console.log("remove")}
+									posts={group.data.body}
+								/>
+							</React.Fragment>
+						))}
+						<div ref={lastElement} style={{height: 20}}/>
 					</div>
 
 				</div>
@@ -232,6 +251,7 @@ const UserPage = () => {
 						setVisible={setShowImageUploader}
 					>
 						<ImageUploader
+							setModalVisible={setShowImageUploader}
 							currentImg={userResponse.data?.picture ?? userpic}
 						/>
 					</MyModal>

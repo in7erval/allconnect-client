@@ -24,7 +24,7 @@ const Status = ({userId, disableHover}) => {
 };
 
 Status.propTypes = {
-	userId: PropTypes.string.isRequired,
+	userId: PropTypes.string,
 	disableHover: PropTypes.bool
 }
 

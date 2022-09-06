@@ -1,7 +1,6 @@
-import {SERVER_URI, USER_KEY} from '../constants';
+import {SERVER_URI} from '../constants';
 import {useContext, useEffect, useRef, useState} from 'react'
 import {io} from 'socket.io-client'
-import storage from "../utils/storage";
 import {Context} from "../index";
 
 export default function useChat(roomId) {
@@ -10,7 +9,6 @@ export default function useChat(roomId) {
 		userId: store.userId,
 		roomId: roomId
 	};
-	storage.set(USER_KEY, user);
 
 	const [messages, setMessages] = useState([])
 
@@ -33,7 +31,29 @@ export default function useChat(roomId) {
 	}, [])
 
 	const sendMessage = async (message) => {
-		socket.emit('message:add', message)
+		if (message.pictures && message.pictures.length >= 0) {
+			if (message.pictures.length === 0) {
+				message.picture = message.pictures[0];
+				delete message.pictures;
+				socket.emit('message:add', message);
+				return;
+			} else {
+				const pictures = message.pictures;
+				const text = message.text;
+				delete message.pictures;
+				for (let index = 0; index < pictures.length - 1; index++) {
+					message.picture = pictures[index];
+					message.text = '';
+					socket.emit('message:add', message);
+				}
+				message.picture = pictures[pictures.length - 1];
+				message.text = text;
+				socket.emit('message:add', message);
+				return;
+			}
+		}
+		delete message.pictures;
+		socket.emit('message:add', message);
 	}
 
 	const removeMessage = (message) => {

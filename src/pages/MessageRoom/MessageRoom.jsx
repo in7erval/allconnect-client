@@ -13,26 +13,6 @@ import Status from "../../components/UI/Status/Status";
 import {Context} from "../../index";
 import {observer} from "mobx-react-lite";
 
-const getPosition = (event_) => {
-	let posx = 0;
-	let posy = 0;
-
-	if (!event_) event_ = window.event;
-
-	if (event_.pageX || event_.pageY) {
-		posx = event_.pageX;
-		posy = event_.pageY;
-	} else if (event_.clientX || event_.clientY) {
-		posx = event_.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
-		posy = event_.clientY + document.body.scrollTop + document.documentElement.scrollTop;
-	}
-
-	return {
-		x: posx,
-		y: posy
-	}
-};
-
 const datetimeToDate = datetime => new Date(datetime).toLocaleDateString();
 
 
@@ -79,7 +59,6 @@ const MessageRoom = () => {
 
 	const parameters = useParams();
 	const {store} = useContext(Context);
-	// store.setActivePage(MESSAGES_PAGE);
 	const loggedUserId = store.userId;
 	const [id1, id2] = parseMessageRoomId(parameters.id);
 	let toUserId = (loggedUserId === id1) ? id2 : id1;
@@ -89,11 +68,10 @@ const MessageRoom = () => {
 	const {messages, sendMessage, removeMessage, addToSeenBy} = useChat(parameters.id);
 	const [showContextMenu, setShowContextMenu] = useState(false);
 	const contextMenuReference = useRef();
-	const [contextMenuFor, setContextMenuFor] = useState(null);
+	const [clickedMessageReference, setClickedMessageReference] = useState({});
+	const [contextMenuFor, setContextMenuFor] = useState('');
 
 	const messagesMap = useMemo(() => groupMessages(messages), [messages]);
-
-	console.log("messages", messagesMap);
 
 	useEffect(() => {
 		scrollToBottom();
@@ -106,7 +84,6 @@ const MessageRoom = () => {
 	});
 
 	useEffect(() => {
-		console.log(`fetch to_user(${toUserId}), localId:${loggedUserId}`);
 		fetchUserTo();
 	}, []);
 
@@ -116,37 +93,10 @@ const MessageRoom = () => {
 
 	const onContextMenu = (event_, messageId) => {
 		event_.preventDefault();
-		console.log(contextMenuReference.current);
-		console.log(contextMenuReference.current.offsetWidth);
-		console.log(contextMenuReference.current.offsetHeight);
-
-		const positionMenu = (eventInPositionMenu) => {
-			let clickCoords = getPosition(eventInPositionMenu);
-			let clickCoordsX = clickCoords.x;
-			let clickCoordsY = clickCoords.y;
-
-			let menuWidth = contextMenuReference.current.offsetWidth + 4;
-			let menuHeight = contextMenuReference.current.offsetHeight + 4;
-
-			let windowWidth = window.innerWidth;
-			let windowHeight = window.innerHeight;
-
-			contextMenuReference.current.style.left =
-				(((windowWidth - clickCoordsX) < menuWidth) ?
-					windowWidth - menuWidth : clickCoordsX) + "px";
-
-			contextMenuReference.current.style.top =
-				(((windowHeight - clickCoordsY) < menuHeight) ?
-					windowHeight - menuHeight : clickCoordsY) + "px";
-
-		}
-
-		console.log(getPosition(event_));
-		positionMenu(event_);
-		setShowContextMenu(true);
+		setClickedMessageReference(event_.currentTarget);
 		setContextMenuFor(messageId);
+		setShowContextMenu(true);
 	};
-
 	return (
 		<div className={cl.main}>
 			{isLoadingUserTo ?
@@ -158,8 +108,8 @@ const MessageRoom = () => {
 					<Loader/>
 				</div>
 				:
-				<div style={{flex: 1}} onClick={() => setShowContextMenu(false)}>
-					<Link to={`/user${user._id}`}>
+				<div style={{flex: 1, position: 'relative'}} onClick={() => setShowContextMenu(false)}>
+					<Link to={`/user${user._id}`} style={{color: "black"}}>
 						<div className={cl.to_user_card}>
 							<div style={{display: "flex", alignItems: "center", justifyContent: "space-evenly"}}>
 								{user.lastName} {user.firstName}
@@ -191,19 +141,21 @@ const MessageRoom = () => {
 						)
 						}
 						<div ref={messagesEndReference}/>
+						<MessageContextMenu
+							isActive={showContextMenu}
+							reference={contextMenuReference}
+							message={clickedMessageReference}
+							liMap={[
+								// {onClick: () => console.log("delete me"), text: "Удалить у меня", isDanger: true},
+								{onClick: () => removeMessage(contextMenuFor), text: "Удалить у всех", isDanger: true}
+								// {onClick: () => () => setShowContextMenu(false), text: "Закрыть", isDanger: false}
+							]}
+						/>
 					</div>
 					<div>
 						<MessageInput sendMessage={sendMessage} message={{user: loggedUserId, roomId: parameters.id}}/>
 					</div>
-					<MessageContextMenu
-						isActive={showContextMenu}
-						reference={contextMenuReference}
-						liMap={[
-							// {onClick: () => console.log("delete me"), text: "Удалить у меня", isDanger: true},
-							{onClick: () => removeMessage(contextMenuFor), text: "Удалить у всех", isDanger: true}
-							// {onClick: () => () => setShowContextMenu(false), text: "Закрыть", isDanger: false}
-						]}
-					/>
+
 				</div>
 			}
 		</div>

@@ -12,16 +12,16 @@
     color: royalblue;
 }
 
-a {
+.navbar a {
     text-decoration: none;
     color: black;
 }
 
-a:active {
+.navbar a:active {
     color: black;
 }
 
-a:hover {
+.navbar a:hover {
     color: black;
 }
 
@@ -111,7 +111,7 @@ a:hover {
     padding: 5px 10px;
 }
 
-a {
+.navbar a {
     text-decoration: none;
 }
 

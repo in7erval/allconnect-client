@@ -6,6 +6,15 @@ import userpic from "../../assets/userpic.jpeg";
 import {Context} from "../../index";
 import {observer} from "mobx-react-lite";
 
+const isSingleEmoji = (stringToCheck) => {
+	if (!stringToCheck || stringToCheck.length === 0) {
+		return false;
+	}
+	const array = [...stringToCheck];
+	if (array.length > 1) return false;
+	return /(?=\p{Emoji})(?!\p{Number})/u.test(array[0]);
+}
+
 const Message = (
 	{
 		message,
@@ -74,11 +83,21 @@ const Message = (
 							<img
 								src={message.picture}
 								alt="Изображение недоступно"
-								style={{maxWidth: '100%', borderRadius: 10, alignSelf: 'center', objectFit: 'cover', maxHeight: '300px'}}
+								style={{
+									maxWidth: '100%',
+									borderRadius: 10,
+									alignSelf: 'center',
+									objectFit: 'cover',
+									maxHeight: '300px'
+								}}
 							/>
 						}
 						<div>
-							{message.text && <p>{message.text}</p>}
+							{message.text &&
+								(isSingleEmoji(message.text) ?
+									<p style={{fontSize: 50}}>{message.text}</p> :
+									<p>{message.text}</p>)
+							}
 							<div
 								style={{
 									margin: 0,

@@ -9,7 +9,7 @@ import {Context} from "../../../index";
 import convert from 'heic2any';
 
 
-const ImageUploader = ({currentImg}) => {
+const ImageUploader = ({currentImg, setModalVisible}) => {
 
 		const [file, setFile] = useState('');
 		const [imagePreviewUrl, setImagePreviewUrl] = useState(currentImg);
@@ -75,6 +75,17 @@ const ImageUploader = ({currentImg}) => {
 
 		return (
 			<div className={cl.image_uploader}>
+				<div className={cl.header}>
+					<p>
+						Загрузка фотографии
+					</p>
+					<button type="button" onClick={() => setModalVisible(false)}>
+						<i className="bi bi-x-lg"></i>
+					</button>
+				</div>
+				<div className={cl.description}>
+					Вы можете загрузить изображение в формате JPG, PNG или HEIC.
+				</div>
 				<div className={cl.preview}>
 					{loading ? <Loader/> : <img src={imagePreviewUrl} alt="pic"/>}
 				</div>
@@ -86,15 +97,19 @@ const ImageUploader = ({currentImg}) => {
 					{/*							console.log("base64", base64);*/}
 					{/*							// setPhoto({image: base64});*/}
 					{/*						}}/>*/}
-					<input
-						className={cl.file_input}
-						type="file"
-						name="image"
-						onChange={_handleImageChange}
-					/>
-					<button className={cl.submit} type="submit">
+					<label className={cl.file_input}>
+						<input
+							className={cl.file_input}
+							type="file"
+							name="image"
+							onChange={_handleImageChange}
+						/>
+						Выбрать фото
+					</label>
+					{ <button className={cl.submit} type="submit">
 						Загрузить
 					</button>
+					}
 				</form>
 			</div>
 		);
@@ -102,7 +117,8 @@ const ImageUploader = ({currentImg}) => {
 ;
 
 ImageUploader.propTypes = {
-	currentImg: PropTypes.string.isRequired
+	currentImg: PropTypes.string.isRequired,
+	setModalVisible: PropTypes.func.isRequired
 }
 
 export default ImageUploader;

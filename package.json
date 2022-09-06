@@ -2,8 +2,8 @@
   "name": "allconnect",
   "version": "0.1.0",
   "private": true,
-  "proxy": "https://109.120.191.219:3001",
   "dependencies": {
+    "@emoji-mart/react": "^1.0.1",
     "@tanstack/react-query": "4.2.3",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
@@ -13,6 +13,7 @@
     "bootstrap-icons": "1.9.1",
     "browser-image-compression": "^2.0.0",
     "compressorjs": "1.1.1",
+    "emoji-mart": "^5.2.1",
     "heic-convert": "^1.2.4",
     "heic2any": "0.0.3",
     "mobx": "6.6.1",
@@ -43,14 +44,16 @@
     "workbox-streams": "^6.5.4"
   },
   "scripts": {
-    "start": "BROWSER=none PORT=3000 HTTPS=true SSL_CRT_FILE=./sslcerts/certificate.crt SSL_KEY_FILE=./sslcerts/private.key react-scripts start",
+    "start": "BROWSER=none HTTPS=true SSL_CRT_FILE=./sslcerts/certificate.crt SSL_KEY_FILE=./sslcerts/private.key react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "env": {
-      "es2022": true
+      "es2022": true,
+      "browser": true,
+      "node": true
     },
     "parserOptions": {
       "ecmaVersion": "latest",

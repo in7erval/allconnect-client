@@ -26,14 +26,18 @@ const BackgroundWork = () => {
 	const initUnreadMessages = async () => {
 		const {data} = await MessageService.getUnreadInit(loggedUserId)
 			.catch(error => store.addError(error));
-		store.setUnreadMessages(data);
+		if (data && data.length >= 0) {
+			store.setUnreadMessages(data);
+		}
 	};
 
 	const subscribeForUnreadMessages = async () => {
 		try {
 			const {data} = await MessageService.getUnread(loggedUserId)
 				.catch(error => store.addError(error));
-			store.setUnreadMessages(data);
+			if (data && data.length >= 0) {
+				store.setUnreadMessages(data);
+			}
 			await subscribeForUnreadMessages();
 		} catch (_error) {
 			console.error(_error);
@@ -46,13 +50,17 @@ const BackgroundWork = () => {
 
 	const initNotifications = async () => {
 		const notifications = await NotificationService.getAllById(loggedUserId, LIMIT_NOTIFICATIONS, 1);
-		store.setNotifications(notifications.data.body);
+		if (notifications?.data?.body && notifications.data.body.length >= 0) {
+			store.setNotifications(notifications.data.body);
+		}
 	}
 
 	const subscribeForNotifications = async () => {
 		try {
 			const {data} = await NotificationService.getOne(loggedUserId);
-			store.addNotification(data);
+			if (data) {
+				store.addNotification(data);
+			}
 			await subscribeForNotifications();
 		} catch (_error) {
 			console.error(_error);

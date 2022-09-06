@@ -2,10 +2,10 @@ import {$authApi} from "./index";
 
 const FileService = {
 
-	upload: async (file, roomId) => {
+	upload: async (file, id) => {
 		const formData = new FormData();
-		formData.append('messages-image', file);
-		return $authApi.post(`/messages/${roomId}/image`, formData,
+		formData.append('image', file);
+		return $authApi.post(`/files/${id}/image`, formData,
 			{
 				headers: {
 					"Content-Type": "multipart/form-data"

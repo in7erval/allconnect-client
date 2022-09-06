@@ -24,11 +24,12 @@
     min-height: 50px;
 }
 
-.post_form button {
+.post_form > button {
     width: auto;
     border: none;
     resize: none;
     outline: none;
+    margin-top: 10px;
     border-radius: 5px;
     background-color: #81A9E1;
     padding: 5px 10px;
@@ -36,12 +37,78 @@
     font-size: 0.9rem;
 }
 
-.post_form button:hover {
+.post_form > button:hover {
     animation-name: changecolor;
     animation-duration: 0.5s;
     animation-fill-mode: forwards;
     cursor: pointer;
 }
+
+.input_img_container {
+    position: relative;
+    max-width: 100px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.input_img_overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    transition: .3s ease;
+    background-color: black;
+    cursor: pointer;
+}
+
+.input_img_container:hover .input_img_overlay {
+    opacity: 0.5;
+}
+
+.icon {
+    color: white;
+    font-size: 100px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    text-align: center;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.input_pic {
+    display: flex;
+    border: none;
+    color: gray;
+    margin-left: 10px;
+    align-items: center;
+    justify-content: center;
+    /*min-height: 50px;*/
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.input_pic i {
+    font-size: 1.5rem;
+}
+
+.input {
+    position: relative;
+    width: 100%;
+    /*background: #eeeeee;*/
+    /*border-top: 3px solid #eeeeee;*/
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 
 @keyframes changecolor {
     from {

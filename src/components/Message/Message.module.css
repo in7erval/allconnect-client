@@ -166,8 +166,8 @@ div.from_them {
 }
 
 .highlight div.from_them {
-    background-color: #d5d5d5;
-    box-shadow: 0 0 20px 5px #d5d5d5;
+    background-color: #c5c5c5;
+    box-shadow: 0 0 20px 5px #c5c5c5;
 }
 
 div.from_them::before {
@@ -280,6 +280,7 @@ div[class^="from_"].emoji::before {
 /*}*/
 
 .message__input {
+    position: relative;
     width: 100%;
     padding: 5px 10px;
     background: #eeeeee;
@@ -325,6 +326,45 @@ div[class^="from_"].emoji::before {
     animation-timing-function: ease-in-out;
     animation-name: slidetop;
     animation-iteration-count: infinite;
+    cursor: pointer;
+}
+
+.message__input_img_container {
+    position: relative;
+    max-width: 100px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.message__input_img_overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    transition: .3s ease;
+    background-color: black;
+    cursor: pointer;
+}
+
+.message__input_img_container:hover .message__input_img_overlay {
+    opacity: 0.5;
+}
+
+.icon {
+    color: white;
+    font-size: 100px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    text-align: center;
+    border: none;
+    background-color: transparent;
     cursor: pointer;
 }
 

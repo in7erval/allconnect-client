@@ -9,6 +9,7 @@ import {Link} from "react-router-dom";
 import Status from "../UI/Status/Status";
 import {Context} from "../../index";
 import {observer} from "mobx-react-lite";
+import postService from "../../API/PostService";
 
 const PostItem = ({post}) => {
 
@@ -109,8 +110,8 @@ const PostItem = ({post}) => {
 					</button>
 				</div>
 				{isOwner &&
-					<button onClick={() => console.log("delete")} className={cl.post__btns_btn_delete}>
-						{/*Удалить*/}
+					<button onClick={() => postService.delete(post._id)} className={cl.post__btns_btn_delete}>
+						Удалить
 					</button>
 				}
 			</div>

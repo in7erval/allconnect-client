@@ -14,9 +14,9 @@ const PostService = {
 		});
 	},
 
-	addNewPost: async (userId, text) => {
+	addNewPost: async (userId, text, imageURL) => {
 		return $authApi.post(`/posts`, {
-			text, owner: userId
+			text, owner: userId, image: imageURL
 		});
 	},
 
@@ -33,6 +33,10 @@ const PostService = {
 			{
 				userId: userLikedId
 			});
+	},
+
+	delete: async(postId) => {
+		return $authApi.post(`/posts/${postId}/delete`);
 	}
 
 };

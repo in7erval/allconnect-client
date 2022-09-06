@@ -46,7 +46,7 @@ const Messages = () => {
 									id={element._id}
 									messagePreview={element.text}
 									messageTime={element.createdAt}
-									isUnread={unreadMessages.some(unreadMessage => unreadMessage.user === element.user._id)}
+									isUnread={unreadMessages?.some(unreadMessage => unreadMessage.user === element.user._id)}
 								/>
 							</Link>
 						))
