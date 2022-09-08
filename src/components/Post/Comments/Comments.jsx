@@ -76,7 +76,7 @@ const Comments = ({postId, setCommentsCount}) => {
 
 	const subscribe = async () => {
 		try {
-			const {data} = await CommentsService.getOne();
+			const {data} = await CommentsService.getOne(postId);
 			console.log(data);
 			setComments(previous => [data.body, ...previous]);
 			await subscribe();

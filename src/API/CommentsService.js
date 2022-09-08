@@ -2,8 +2,12 @@ import {$authApi} from "./index";
 
 const CommentsService = {
 
-	getOne: async () => {
-		return $authApi.get("/comment");
+	getOne: async (postId) => {
+		return $authApi.get("/comment", {
+			params: {
+				postId
+			}
+		});
 	},
 
 	getAll: async (postId) => {

@@ -77,7 +77,7 @@ export default class Store {
 			this.setUser(response.data.user);
 		} catch (error) {
 			console.error("ERROR", error);
-			console.error(error.response?.data?.message);
+			// console.error(error?.response?.data?.message);
 		}
 	}
 
@@ -99,14 +99,17 @@ export default class Store {
 
 	async logout() {
 		try {
-			const _response = await UserAuthService.logout();
+			await UserAuthService.logout();
 			this.setUser({});
 			this.setUnreadMessages([]);
 			this.setOnlineUsers([]);
 			localStorage.removeItem(TOKEN);
 			this.setAuth(false);
 		} catch (error) {
+			console.log(error);
 			console.error(error.response?.data?.message);
+		} finally {
+			this.setLoading(false);
 		}
 	}
 
@@ -125,6 +128,7 @@ export default class Store {
 			this.setAuth(true);
 			this.setUser(response.data.user);
 		} catch (error) {
+			console.log(error);
 			console.log(error.response?.data?.message);
 		} finally {
 			this.setLoading(false);
