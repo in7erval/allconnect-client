@@ -13,6 +13,7 @@ export default class Store {
 	onlineUsers = [];
 	unreadMessages = [];
 	notifications = [];
+	// ssEvents = null;
 
 	constructor() {
 		makeAutoObservable(this);
@@ -25,6 +26,18 @@ export default class Store {
 	setUnreadMessages(messages) {
 		this.unreadMessages = messages;
 	}
+
+	// initSSEvents(userId) {
+	// 	this.ssEvents = new EventSource(`${SERVER_URI}/stream/${userId}`, {withCredentials: true});
+	//
+	// 	this.ssEvents.addEventListener('open', (event) => {
+	// 		console.log(event);
+	// 	});
+	//
+	// 	this.ssEvents.addEventListener('message', (event) => {
+	// 		console.log(JSON.parse(event.data));
+	// 	});
+	// }
 
 	get countUnreadMessages() {
 		return this.unreadMessages.length;
@@ -53,6 +66,7 @@ export default class Store {
 	}
 
 	addError(error) {
+		console.log('add new error', error);
 		this.errors = [...this.errors, error];
 	}
 

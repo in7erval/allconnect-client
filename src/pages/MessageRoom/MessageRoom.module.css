@@ -60,6 +60,27 @@
     border-radius: 25px;
 }
 
+.down {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+.down button {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    opacity: 0.5;
+}
+
+.down button i {
+    font-size: 1.5rem;
+    color: royalblue;
+}
+
+.down button:hover {
+    opacity: 0.9;
+}
+
 @media (max-width: 600px) {
     .messages {
         height: calc(90vh - 50px - 220px);

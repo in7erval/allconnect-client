@@ -2,8 +2,6 @@ import axios from 'axios';
 
 import {SERVER_URI, TOKEN} from "../constants";
 
-console.log(SERVER_URI);
-
 export const $api = axios.create({
 	baseURL: `${SERVER_URI}/api`,
 });

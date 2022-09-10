@@ -21,19 +21,18 @@ const Navbar = () => {
 				{/*<SearchNav/>*/}
 
 				{store.isAuth &&
-					<div className={cl.show_menu}>
-						<Nav activeClassName={cl.active}/>
-					</div>
+					<>
+						<div className={cl.show_menu}>
+							<Nav activeClassName={cl.active}/>
+						</div>
+						<div className={cl.navbar__links}>
+							<a className={cl.navbar_link} onClick={logout}>
+								<i className="bi bi-box-arrow-right" style={{fontSize: "1.25rem"}}></i>
+							</a>
+						</div>
+						<NotificationsNav/>
+					</>
 				}
-
-				{store.isAuth && <NotificationsNav />}
-
-				<div className={cl.navbar__links}>
-					<a className={cl.navbar_link} onClick={logout}>
-						<i className="bi bi-box-arrow-right" style={{fontSize: "1.25rem"}}></i>
-					</a>
-				</div>
-
 
 			</div>
 		</nav>

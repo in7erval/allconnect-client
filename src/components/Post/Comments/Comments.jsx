@@ -79,7 +79,10 @@ const Comments = ({postId, setCommentsCount}) => {
 			const {data} = await CommentsService.getOne(postId);
 			console.log(data);
 			setComments(previous => [data.body, ...previous]);
-			await subscribe();
+			console.log("getOne, subscribe again");
+			setTimeout(() => {
+				subscribe()
+			}, 100);
 		} catch (_error) {
 			console.error(_error);
 			setTimeout(() => {
@@ -88,17 +91,17 @@ const Comments = ({postId, setCommentsCount}) => {
 		}
 	}
 
-	const sendComment = async () => {
+	const sendComment = async (comment) => {
 		await CommentsService.add({
-			text: commentMessage,
+			text: comment,
 			userId: store.userId,
 			postId
-		})
+		}).catch(error => store.addError(error));
 	}
 
 	const sendCommentAction = () => {
 		if (commentMessage !== "") {
-			sendComment();
+			sendComment(commentMessage);
 			setCommentMessage("");
 		}
 	};
@@ -121,9 +124,6 @@ const Comments = ({postId, setCommentsCount}) => {
 	}, [comments]);
 
 	const commentsMap = useMemo(() => groupComments(comments), [comments]);
-
-
-	console.log(commentsMap);
 
 	return (
 		<div>

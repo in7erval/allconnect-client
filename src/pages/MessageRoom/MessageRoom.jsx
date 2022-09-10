@@ -74,8 +74,13 @@ const MessageRoom = () => {
 	const messagesMap = useMemo(() => groupMessages(messages), [messages]);
 
 	useEffect(() => {
-		scrollToBottom();
+		setTimeout(
+			scrollToBottom, 500);
 	}, [messagesMap]);
+
+	// useEffect(() => {
+	// 	scrollToBottom();
+	// }, []);
 
 	const [fetchUserTo, isLoadingUserTo, _error] = useFetching(async () => {
 		await UserService.getFullById(toUserId)
@@ -97,6 +102,7 @@ const MessageRoom = () => {
 		setContextMenuFor(messageId);
 		setShowContextMenu(true);
 	};
+
 	return (
 		<div className={cl.main}>
 			{isLoadingUserTo ?
@@ -121,6 +127,11 @@ const MessageRoom = () => {
 						</div>
 					</Link>
 					<div className={cl.messages}>
+						<div className={cl.down}>
+							<button type="button" onClick={() => scrollToBottom()}>
+								<i className="bi bi-caret-down-square-fill"></i>
+							</button>
+						</div>
 						{messages && messages.length > 0 && [...messagesMap.keys()].map(key =>
 							(<div key={key}>
 									<div className={cl.message_date}>

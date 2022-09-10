@@ -10,7 +10,7 @@ export default function useChat(roomId) {
 		roomId: roomId
 	};
 
-	const [messages, setMessages] = useState([])
+	const [messages, setMessages] = useState([]);
 
 	const { current: socket } = useRef(
 		io(SERVER_URI, {

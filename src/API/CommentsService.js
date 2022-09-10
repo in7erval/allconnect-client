@@ -22,7 +22,7 @@ const CommentsService = {
 	},
 
 	add: async (comment) => {
-		await $authApi.post('/comments', comment);
+		return $authApi.post('/comments', comment);
 	}
 
 };
