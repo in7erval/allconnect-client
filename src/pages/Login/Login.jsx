@@ -1,20 +1,17 @@
 import {useEffect, useRef, useState} from 'react';
 // import mock from '../../assets/mock-iphone.png';
-import LoginDefault from "./LoginDefault";
 import LoginForm from "./LoginForm";
 import RegistrationForm from "./RegistrationForm";
 import cl from "./Login.module.css";
 import {MouseParallaxChild, MouseParallaxContainer} from "react-parallax-mouse";
 
 const Login = () => {
-	const [isLoginOpen, setIsLoginOpen] = useState(false);
 	const [isRegistrationOpen, setIsRegistrationOpen] = useState(false);
 	const [cursorX, setCursorX] = useState();
 	const [cursorY, setCursorY] = useState(0);
 	const reference = useRef();
 
 	const returnToHome = () => {
-		setIsLoginOpen(false);
 		setIsRegistrationOpen(false);
 	};
 
@@ -35,21 +32,7 @@ const Login = () => {
 			}}
 			ref={reference}
 		>
-			<div
-				style={{
-					position: "absolute",
-					top: cursorY - 50,
-					left: cursorX - 50,
-					width: 100,
-					height: 100,
-					borderRadius: '50%',
-					backgroundColor: "royalblue",
-					filter: 'blur(70px)',
-					zIndex: 1,
-					pointerEvents: 'none'
-				}}
-			>
-			</div>
+
 			{/*<div className={cl.login_page__info}>*/}
 			{/*	<p className={cl.p_first}>Для мобильных устройств</p>*/}
 			{/*	<p className={cl.p_second}>*/}
@@ -75,33 +58,49 @@ const Login = () => {
 			{/*</div>*/}
 			<MouseParallaxContainer
 				containerStyles={{
-					width: '100%',
-					height: '100%',
+					width: '90%',
+					height: '90%',
 					display: 'flex',
 					alignItems: 'center',
 					justifyContent: 'center',
 					flex: 1,
 					zIndex: 2,
+					overflow: "unset"
 				}}
 			>
-				{!isLoginOpen && !isRegistrationOpen &&
-					<MouseParallaxChild
-						factorX={0.05}
-						factorY={0.05}
-					>
-						<LoginDefault
+
+				<MouseParallaxChild
+					factorX={0.01}
+					factorY={0.01}
+				>
+					{!isRegistrationOpen ?
+						<LoginForm
 							cursorX={cursorX}
 							cursorY={cursorY}
-							setIsLoginOpen={setIsLoginOpen}
-							setIsRegistrationOpen={setIsRegistrationOpen}/>
-					</MouseParallaxChild>
+							setIsRegistrationOpen={setIsRegistrationOpen}
+						/>
+						:
+						<RegistrationForm returnToHome={returnToHome}/>}
+				</MouseParallaxChild>
 
-				}
-				{isLoginOpen ?
-					<LoginForm returnToHome={returnToHome}/>
-					: (isRegistrationOpen && <RegistrationForm returnToHome={returnToHome}/>)
-				}
 			</MouseParallaxContainer>
+
+			<div
+				style={{
+					position: "fixed",
+					top: cursorY - 100,
+					left: cursorX - 100,
+					width: 200,
+					height: 200,
+					borderRadius: '50%',
+					backgroundColor: "#be961e",
+					filter: 'blur(100px) invert(1)',
+					zIndex: 1,
+					pointerEvents: 'none',
+					mixBlendMode: "multiply"
+				}}
+			>
+			</div>
 		</div>
 	);
 };

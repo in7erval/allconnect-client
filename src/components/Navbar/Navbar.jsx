@@ -14,29 +14,24 @@ const Navbar = () => {
 		store.logout();
 	}
 
-	return (
-		<nav className={cl.navbar}>
+	return store.isAuth ?
+		(<nav className={cl.navbar}>
 			<div className={cl.navbar__content}>
 				<Link to="/"><Logo/></Link>
 				{/*<SearchNav/>*/}
 
-				{store.isAuth &&
-					<>
-						<div className={cl.show_menu}>
-							<Nav activeClassName={cl.active}/>
-						</div>
-						<div className={cl.navbar__links}>
-							<a className={cl.navbar_link} onClick={logout}>
-								<i className="bi bi-box-arrow-right" style={{fontSize: "1.25rem"}}></i>
-							</a>
-						</div>
-						<NotificationsNav/>
-					</>
-				}
+				<NotificationsNav/>
+				<div className={cl.show_menu}>
+					<Nav activeClassName={cl.active}/>
+				</div>
+				<div className={cl.navbar__links}>
+					<a className={cl.navbar_link} onClick={logout}>
+						<i className="bi bi-box-arrow-right" style={{fontSize: "1.25rem"}}></i>
+					</a>
+				</div>
 
 			</div>
-		</nav>
-	);
+		</nav>) : <></>;
 };
 
 export default observer(Navbar);

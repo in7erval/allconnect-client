@@ -1,6 +1,4 @@
 import {useContext, useState} from 'react';
-import showPass from '../../assets/pass_show.png';
-import passVisible from '../../assets/pass_visible.png';
 import cl from './Login.module.css';
 import PropTypes from 'prop-types';
 import {Context} from "../../index";
@@ -21,11 +19,11 @@ const RegistrationForm = ({returnToHome}) => {
 	}
 
 	return (
-		<div className={cl.login_page__registration + " w-400 justify-content-start"}>
+		<div className={cl.login_page__login}>
 			<div className={cl.login_page__login_title}>
-				<h3>Регистрация в allconnect</h3>
+				Регистрация в allconnect
 			</div>
-			<form className={cl.login_form} onSubmit={sendData}>
+			<form className={cl.registration_form} onSubmit={sendData}>
 				<div className={cl.login_form__input_group}>
 					<label htmlFor="firstname">Имя</label>
 					<input
@@ -48,7 +46,7 @@ const RegistrationForm = ({returnToHome}) => {
 					/>
 				</div>
 				<div className={cl.login_form__input_group}>
-					<label htmlFor="username">Email</label>
+					<label htmlFor="username">Электронная почта</label>
 					<input
 						id="username"
 						type="email"
@@ -58,13 +56,11 @@ const RegistrationForm = ({returnToHome}) => {
 					/>
 				</div>
 				<div className={cl.login_form__input_group}>
-					<div className={cl.login_form__password_and_img}>
+					<div className={cl.login_form__password_and_pic}>
 						<label htmlFor="new-password">Пароль</label>
-						<img
-							src={passwordVisible ? passVisible : showPass}
-							alt="showpass"
-							onClick={() => setPasswordVisible(!passwordVisible)}
-						/>
+						<div onClick={() => setPasswordVisible(!passwordVisible)}>
+							{passwordVisible ? <i className="bi bi-eye-fill"></i> : <i className="bi bi-eye"></i>}
+						</div>
 					</div>
 					<input
 						id="new-password"
@@ -74,20 +70,27 @@ const RegistrationForm = ({returnToHome}) => {
 						className={passwordVisible ? "" : "ls-5"}
 					/>
 				</div>
-
-				<button
-					type="submit"
-					className={cl.login_page__login_button + " " + cl.btn_register_color}
-				>
-					Зарегистрироваться
-				</button>
+				<div style={{
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'space-evenly',
+					marginTop: 20
+				}}>
+					<button
+						className={cl.btn_return}
+						onClick={returnToHome}
+					>
+						<i className="bi bi-caret-left"></i>
+					</button>
+					<button
+						type="submit"
+						className={cl.login_page__login_button + " " + cl.btn_register_color}
+					>
+						Зарегистрироваться
+					</button>
+				</div>
 			</form>
-			<button
-				className={cl.btn_return}
-				onClick={returnToHome}
-			>
-				<i className="bi bi-caret-left"></i>
-			</button>
+
 		</div>
 	);
 };

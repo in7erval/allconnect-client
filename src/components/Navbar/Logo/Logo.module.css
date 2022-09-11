@@ -16,10 +16,27 @@
     font-weight: 500;
     font-size: 20px;
     text-decoration: none;
+    font-family: 'Zen Dots', 'Roboto', cursive;
+}
+
+.logo_text_small {
+    display: flex;
+    height: 25px;
+    font-weight: 500;
+    font-size: 20px;
+    text-decoration: none;
+    font-family: 'Zen Dots', 'Roboto', cursive;
+}
+
+.logo_text_small {
+    display: none;
 }
 
 @media (max-width: 500px) {
     .logo_text {
         display: none;
+    }
+    .logo_text_small {
+        display: block;
     }
 }
