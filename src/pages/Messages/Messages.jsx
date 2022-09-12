@@ -1,5 +1,4 @@
 import {useContext, useEffect, useState} from 'react';
-import Loader from "../../components/UI/Loader/Loader";
 import {useFetching} from "../../hooks/useFetching";
 import MessageRoomCard from "../../components/Message/MessageRoomCard/MessageRoomCard";
 
@@ -8,6 +7,23 @@ import MessageService from "../../API/MessageService";
 import {Link} from "react-router-dom";
 import {Context} from "../../index";
 import {observer} from "mobx-react-lite";
+import MessageRoomCardLoader from "../../components/Message/MessageRoomCard/MessageRoomCardLoader";
+
+const LoaderMessageRooms = () => {
+	return (
+		<>
+			<Link to={"#"}>
+				<MessageRoomCardLoader/>
+			</Link>
+			<Link to={"#"}>
+				<MessageRoomCardLoader/>
+			</Link>
+			<Link to={"#"}>
+				<MessageRoomCardLoader/>
+			</Link>
+		</>
+	)
+}
 
 const Messages = () => {
 	const [lastMessages, setLastMessages] = useState([]);
@@ -30,6 +46,10 @@ const Messages = () => {
 		fetchMessagesForPage();
 	}, []);
 
+	useEffect(() => {
+		document.title = "Сообщения";
+	});
+
 	return (
 		<div style={{flex: 1, width: "100%", maxWidth: 600}}>
 			<div>
@@ -38,7 +58,7 @@ const Messages = () => {
 				</h2>
 
 				<div className={cl.messages_rooms}>
-					{isLoadingMessages ? <Loader/> :
+					{isLoadingMessages ? <LoaderMessageRooms/> :
 						lastMessages.map(element => (
 							<Link key={element._id} to={`/messages/${element._id}`}>
 								<MessageRoomCard

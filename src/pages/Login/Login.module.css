@@ -63,7 +63,7 @@
 .login_page__login_title {
     font-size: 25px;
     margin-top: 10px;
-    font-family: -apple-system, 'Zen Dots', 'Roboto', cursive;
+    font-family: 'Zen Dots', 'Roboto', cursive;
     color: black;
     text-align: center;
     margin-bottom: 20px;
@@ -196,6 +196,12 @@
     border-radius: 20%;
 }
 
+.login_error {
+    padding: 0 20px;
+    color: red;
+    font-weight: bold;
+}
+
 @media (max-width: 800px) {
     .login_page__info {
         display: none;
@@ -204,7 +210,7 @@
 
 @media (max-width: 400px) {
 
-    .w-400 {
+    .login_page__login {
         width: 100%;
     }
 }

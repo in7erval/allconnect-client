@@ -20,8 +20,7 @@ const PopupErrors = () => {
 				(
 					<div key={index} className={cl.popup} onClick={_event => deleteError_(index)}>
 						<p className={cl.helper}>X</p>
-						{/*{element.msg ? (<p>{element.msg}</p>) : (<p>{element}</p>)}*/}
-						{element.message ? (<p>{element.message}</p>) : (<p>{element}</p>)}
+						{element.message}
 					</div>
 				)
 			)}

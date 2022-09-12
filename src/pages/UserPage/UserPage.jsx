@@ -1,6 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Link, useParams} from "react-router-dom";
-import Loader from "../../components/UI/Loader/Loader";
 import UserService from "../../API/UserService";
 import PostList from "../../components/Post/PostList";
 import userpic from "../../assets/userpic.jpeg";
@@ -13,6 +12,11 @@ import {useInView} from "react-intersection-observer";
 import {useInfiniteQuery, useQuery} from "@tanstack/react-query";
 import {Context} from "../../index";
 import {observer} from "mobx-react-lite";
+import LoadingImage from "../../components/UI/LoadingImage/LoadingImage";
+import LoaderForImage from "../../components/UI/Loader/LoaderForImage";
+import LoaderForUserPic from "../../components/UI/Loader/LoaderForUserPic";
+import LoaderPostList from "../../components/UI/Loader/LoaderPostList";
+import LoaderText from "../../components/UI/Loader/LoaderText";
 
 const determineIsFriend = (userFriendsId, friendId) => {
 	return userFriendsId.map(element => element._id).includes(friendId);
@@ -20,6 +24,68 @@ const determineIsFriend = (userFriendsId, friendId) => {
 
 const createRoomId = (firstId, secondId) => firstId > secondId ? `${firstId}:${secondId}` : `${secondId}:${firstId}`;
 
+
+const LoaderUserInfo = () => {
+	return <div className={cl.user_page__pic_name}>
+		<div className={cl.user_page__pic_and_btns}>
+			<div className={cl.user_pic}>
+				<LoaderForImage/>
+			</div>
+		</div>
+		<div className={cl.user_page__info_stats}>
+			<div className={cl.user_page__info}>
+				<div style={{display: "flex", flexDirection: "row", marginBottom: 10, width: '100%', justifyContent: "space-evenly"}}>
+					<LoaderText/>
+					<LoaderText/>
+				</div>
+				<div style={{backgroundColor: "lightgray", width: "100%", height: 1}}></div>
+				<div style={{marginTop: 10}}>
+					<LoaderText/>
+				</div>
+			</div>
+			<div className={cl.user_page__stats}>
+				<Link to={`#`}>
+					<LoaderText/>
+					{/*<div>{userResponse.data?.friends?.length}</div>*/}
+					<p>друзей</p>
+				</Link>
+				<Link to="#" aria-disabled={true} className={cl.disabled_link}>
+					<LoaderText/>
+					<p>записей</p>
+				</Link>
+			</div>
+		</div>
+	</div>
+}
+
+const LoaderFriends = () => {
+	return (
+		<div className={cl.user_page__friends}>
+			<Link to="#">
+				<div className={cl.user_page__friends_header}>
+					<div>Друзья</div>
+					<div>
+						<LoaderText/>
+					</div>
+				</div>
+			</Link>
+			<div className={cl.user_page__friends_imgs}>
+				<Link to="#" className="tooltip">
+					<span className="tooltiptext"><LoaderText/></span>
+					<LoaderForUserPic/>
+				</Link>
+				<Link to="#" className="tooltip">
+					<span className="tooltiptext"><LoaderText/></span>
+					<LoaderForUserPic/>
+				</Link>
+				<Link to="#" className="tooltip">
+					<span className="tooltiptext"><LoaderText/></span>
+					<LoaderForUserPic/>
+				</Link>
+			</div>
+		</div>
+	);
+}
 
 const UserPage = () => {
 		const LIMIT_POSTS = 10;
@@ -62,6 +128,9 @@ const UserPage = () => {
 		useEffect(() => {
 			if (!isFetching && !isOwner) {
 				setIsFriend(determineIsFriend(userResponse.data.friends, loggedUserId));
+			}
+			if (!isFetching) {
+				document.title = `${userResponse.data.firstName} ${userResponse.data.lastName}`;
 			}
 			// else {
 			// 	setEditedFirstName(userResponse.data.firstName);
@@ -112,115 +181,120 @@ const UserPage = () => {
 		/* todo: fix loader */
 		return (
 			<div className={cl.user_page + " justify-content-start"}>
-				{isLoadingUser || isLoadingPosts ?
-					<Loader/> : (
-						<div className={cl.user_page__pic_name}>
-							<div className={cl.user_page__pic_and_btns}>
-								<div className={cl.user_pic}>
-									<img src={userResponse.data.picture ?? userpic} alt={"Изображение недоступно"}/>
-								</div>
-								<div className={cl.user_pic_btns}>
-									{isOwner &&
-										<button onClick={() => setShowImageUploader(true)} className={cl.user_button}>
-											Загрузить фото
-										</button>
-									}
-									{!isOwner &&
-										<div>
-											<Link to={`/messages/${createRoomId(pageUserId, loggedUserId)}`}>
-												Написать сообщение
-											</Link>
-										</div>}
-									{!isOwner && (!isFriend ?
-										(<button onClick={addFriend}>
-											Добавить в друзья
-										</button>) :
-										(<button className={cl.danger} onClick={deleteFriend}>
-											Удалить из друзей
-										</button>))
-									}
-								</div>
+				{isLoadingUser || isLoadingPosts ? <LoaderUserInfo/> :
+					<div className={cl.user_page__pic_name}>
+						<div className={cl.user_page__pic_and_btns}>
+							<div className={cl.user_pic}>
+								<LoadingImage
+									src={userResponse.data.picture ?? userpic}
+									alt={"Изображение недоступно"}
+									showWhenLoading={<LoaderForImage/>}/>
 							</div>
-							<div className={cl.user_page__info_stats}>
-								<div className={cl.user_page__info}>
-									<div style={{display: "flex", flexDirection: "column"}}>
-										<div style={{marginRight: -15, marginTop: -15, height: 20, alignSelf: "flex-end"}}>
-											<Status userId={pageUserId}/>
-										</div>
-										<h2>{userResponse.data.lastName} {userResponse.data.firstName}</h2>
-
-										{/* fixme: Убрал редактирование имени, сделать отдельную страницу*/}
-										{/*{isOwner ? (*/}
-										{/*		<form onSubmit={changeName}>*/}
-										{/*			<FlexibleInput*/}
-										{/*				content={editedLastName}*/}
-										{/*				onChange={event_ => setEditedLastName(event_.target.value)}*/}
-										{/*			/>*/}
-										{/*			<FlexibleInput*/}
-										{/*				content={editedFirstName}*/}
-										{/*				onChange={event_ => setEditedFirstName(event_.target.value)}*/}
-										{/*			/>*/}
-										{/*			<button type="submit" hidden/>*/}
-										{/*		</form>*/}
-										{/*	) :*/}
-										{/*	(<h2>{userResponse.data.lastName} {userResponse.data.firstName}</h2>)*/}
-										{/*}*/}
-
-									</div>
-									<div style={{backgroundColor: "lightgray", width: "100%", height: 1}}></div>
-									<p style={{fontSize: "0.9rem", color: "gray"}}>Информация отсутствует</p>
-								</div>
-								<div className={cl.user_page__stats}>
-									<Link to={`/friends/${isOwner ? "" : pageUserId}`}>
-										<div>{userResponse.data?.friends?.length}</div>
-										<p>друзей</p>
-									</Link>
-									<Link to="#" aria-disabled={true} className={cl.disabled_link}>
-										<div>{postsData.pages[0].data.count}</div>
-										<p>записей</p>
-									</Link>
-								</div>
+							<div className={cl.user_pic_btns}>
+								{isOwner &&
+									<button onClick={() => setShowImageUploader(true)} className={cl.user_button}>
+										Загрузить фото
+									</button>
+								}
+								{!isOwner &&
+									<div>
+										<Link to={`/messages/${createRoomId(pageUserId, loggedUserId)}`}>
+											Написать сообщение
+										</Link>
+									</div>}
+								{!isOwner && (!isFriend ?
+									(<button onClick={addFriend}>
+										Добавить в друзья
+									</button>) :
+									(<button className={cl.danger} onClick={deleteFriend}>
+										Удалить из друзей
+									</button>))
+								}
 							</div>
 						</div>
-					)}
+						<div className={cl.user_page__info_stats}>
+							<div className={cl.user_page__info}>
+								<div style={{display: "flex", flexDirection: "column"}}>
+									<div style={{marginRight: -15, marginTop: -15, height: 20, alignSelf: "flex-end"}}>
+										<Status userId={pageUserId}/>
+									</div>
+									<h2>{userResponse.data.lastName} {userResponse.data.firstName}</h2>
+
+									{/* fixme: Убрал редактирование имени, сделать отдельную страницу*/}
+									{/*{isOwner ? (*/}
+									{/*		<form onSubmit={changeName}>*/}
+									{/*			<FlexibleInput*/}
+									{/*				content={editedLastName}*/}
+									{/*				onChange={event_ => setEditedLastName(event_.target.value)}*/}
+									{/*			/>*/}
+									{/*			<FlexibleInput*/}
+									{/*				content={editedFirstName}*/}
+									{/*				onChange={event_ => setEditedFirstName(event_.target.value)}*/}
+									{/*			/>*/}
+									{/*			<button type="submit" hidden/>*/}
+									{/*		</form>*/}
+									{/*	) :*/}
+									{/*	(<h2>{userResponse.data.lastName} {userResponse.data.firstName}</h2>)*/}
+									{/*}*/}
+
+								</div>
+								<div style={{backgroundColor: "lightgray", width: "100%", height: 1}}></div>
+								<p style={{fontSize: "0.9rem", color: "gray"}}>Информация отсутствует</p>
+							</div>
+							<div className={cl.user_page__stats}>
+								<Link to={`/friends/${isOwner ? "" : pageUserId}`}>
+									<div>{userResponse.data?.friends?.length}</div>
+									<p>друзей</p>
+								</Link>
+								<Link to="#" aria-disabled={true} className={cl.disabled_link}>
+									<div>{postsData.pages[0].data.count}</div>
+									<p>записей</p>
+								</Link>
+							</div>
+						</div>
+					</div>
+				}
 
 				<div style={{
 					display: 'flex',
 					flexWrap: 'wrap',
 					justifyContent: 'center'
 				}}>
-					{isLoadingUser ?
-						<Loader/> : (
-							<div className={cl.user_page__friends}>
-								<Link to={`/friends/${isOwner ? "" : pageUserId}`}>
-									<div className={cl.user_page__friends_header}>
-										<div>Друзья</div>
-										<div>
-											<p>{userResponse.data?.friends?.length}</p>
-										</div>
+					{isLoadingUser ? <LoaderFriends/> : (
+						<div className={cl.user_page__friends}>
+							<Link to={`/friends/${isOwner ? "" : pageUserId}`}>
+								<div className={cl.user_page__friends_header}>
+									<div>Друзья</div>
+									<div>
+										<p>{userResponse.data?.friends?.length}</p>
 									</div>
-								</Link>
-								<div className={cl.user_page__friends_imgs}>
-									{userResponse.data?.friends?.slice(0, indexForFriendsArray)?.map(element =>
-										(<Link key={element._id} to={"/user" + element._id} className="tooltip">
-												<span className="tooltiptext">{element.lastName} {element.firstName}</span>
-												<img src={element.picture ?? userpic} alt="Изображение недоступно"/>
-												<div style={{position: "relative", top: -20, right: 10}}>
-													<Status userId={element._id} disableHover={true}/>
-												</div>
-											</Link>
-										)
-									)
-									}
 								</div>
-								{userResponse.data?.friends?.length > 6 &&
-									<button className={cl.user_page__friends_imgs__helper_btn}
-													onClick={() => setShowAllFriends(!showAllFriends)}>
-										{showAllFriends ? "Скрыть" : "Показать всех"}
-									</button>
+							</Link>
+							<div className={cl.user_page__friends_imgs}>
+								{userResponse.data?.friends?.slice(0, indexForFriendsArray)?.map(element =>
+									(<Link key={element._id} to={"/user" + element._id} className="tooltip">
+											<span className="tooltiptext">{element.lastName} {element.firstName}</span>
+											<LoadingImage
+												src={element.picture ?? userpic}
+												alt="Изображение недоступно"
+												showWhenLoading={<LoaderForUserPic/>}
+											/>
+											<div style={{position: "relative", top: -20, right: 10}}>
+												<Status userId={element._id} disableHover={true}/>
+											</div>
+										</Link>
+									)
+								)
 								}
 							</div>
-						)}
+							{userResponse.data?.friends?.length > 6 &&
+								<button className={cl.user_page__friends_imgs__helper_btn}
+												onClick={() => setShowAllFriends(!showAllFriends)}>
+									{showAllFriends ? "Скрыть" : "Показать всех"}
+								</button>
+							}
+						</div>
+					)}
 
 
 					<div style={{flex: 5}}>
@@ -233,7 +307,7 @@ const UserPage = () => {
 							<p>Посты</p>
 							<p>{isLoadingPosts ? "загрузка..." : postsData.pages[0].data.count}</p>
 						</div>
-						{isLoadingPosts ? <Loader/> : postsData.pages.map((group, index) => (
+						{isLoadingPosts ? <LoaderPostList/> : postsData.pages.map((group, index) => (
 							<React.Fragment key={index}>
 								<PostList
 									remove={() => console.log("remove")}

@@ -9,7 +9,9 @@ import {Link} from "react-router-dom";
 import Status from "../UI/Status/Status";
 import {Context} from "../../index";
 import {observer} from "mobx-react-lite";
-import postService from "../../API/PostService";
+import LoadingImage from "../UI/LoadingImage/LoadingImage";
+import LoaderForUserPic from "../UI/Loader/LoaderForUserPic";
+import LoaderForImage from "../UI/Loader/LoaderForImage";
 
 const PostItem = ({post}) => {
 
@@ -43,7 +45,15 @@ const PostItem = ({post}) => {
 	return (<div className={cl.post}>
 			<Link to={`/user${post.owner._id}`}>
 				<div className={cl.post__owner}>
-					<img src={post.owner.picture} alt="Изображение недоступно"/>
+					<LoadingImage
+						src={post.owner.picture}
+						alt="Изображение недоступно"
+						showWhenLoading={
+							<div style={{marginRight: 10}}>
+								<LoaderForUserPic/>
+							</div>
+						}/>
+					{/*<img />*/}
 					<div
 						style={{
 							display: "flex",
@@ -64,7 +74,7 @@ const PostItem = ({post}) => {
 					{new Date(post.publishDate).toLocaleString()}
 				</div>
 				<div className={cl.post__content}>
-					{post.image && <img src={post.image} alt="Pic"/>}
+					{post.image && <LoadingImage src={post.image} alt="Pic" showWhenLoading={<LoaderForImage/>}/>}
 					<div>
 						{post.text}
 					</div>
@@ -110,7 +120,7 @@ const PostItem = ({post}) => {
 					</button>
 				</div>
 				{isOwner &&
-					<button onClick={() => postService.delete(post._id)} className={cl.post__btns_btn_delete}>
+					<button onClick={() => PostService.delete(post._id)} className={cl.post__btns_btn_delete}>
 						Удалить
 					</button>
 				}

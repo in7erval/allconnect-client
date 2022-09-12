@@ -5,6 +5,9 @@ import {useInView} from "react-intersection-observer";
 import userpic from "../../assets/userpic.jpeg";
 import {Context} from "../../index";
 import {observer} from "mobx-react-lite";
+import LoadingImage from "../UI/LoadingImage/LoadingImage";
+import LoaderForUserPic from "../UI/Loader/LoaderForUserPic";
+import LoaderForImage from "../UI/Loader/LoaderForImage";
 
 const isSingleEmoji = (stringToCheck) => {
 	if (!stringToCheck || stringToCheck.length === 0) {
@@ -65,31 +68,29 @@ const Message = (
 				}}
 			>
 				{!isCurrentUserMessage &&
-					<img
+					<LoadingImage
 						src={message.user.picture ?? userpic}
 						alt="Изображение недоступно"
 						className={message.continuous ? cl.hide : ""}
-					/>}
+						showWhenLoading={
+								<div style={{width: 30, height: 30, alignSelf: 'end', zIndex: 1, marginRight: 10}}>
+									{message.continuous ? null : <LoaderForUserPic small={true}/>}
+								</div>
+						}
+					/>
+				}
 				<div
 					onContextMenu={(event_) => onContextMenu(event_, message._id)}
 					className={messageClass + " " + cl.message_content}
 				>
 					{!isCurrentUserMessage &&
 						<a className={cl.name} href={`/user${message.user._id}`}>{message.user.firstName}</a>}
-					<div style={{
-						flexDirection: 'column',
-					}}>
+					<div className={cl.message_img}>
 						{message.picture &&
-							<img
+							<LoadingImage
 								src={message.picture}
 								alt="Изображение недоступно"
-								style={{
-									maxWidth: '100%',
-									borderRadius: 10,
-									alignSelf: 'center',
-									objectFit: 'cover',
-									maxHeight: '300px'
-								}}
+								showWhenLoading={<LoaderForImage/>}
 							/>
 						}
 						<div>

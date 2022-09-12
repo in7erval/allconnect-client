@@ -1,17 +1,20 @@
-import {useEffect, useRef, useState} from 'react';
+import {useContext, useEffect, useRef, useState} from 'react';
 // import mock from '../../assets/mock-iphone.png';
 import LoginForm from "./LoginForm";
 import RegistrationForm from "./RegistrationForm";
 import cl from "./Login.module.css";
 import {MouseParallaxChild, MouseParallaxContainer} from "react-parallax-mouse";
+import {Context} from "../../index";
 
 const Login = () => {
 	const [isRegistrationOpen, setIsRegistrationOpen] = useState(false);
 	const [cursorX, setCursorX] = useState();
 	const [cursorY, setCursorY] = useState(0);
 	const reference = useRef();
+	const {store} = useContext(Context);
 
 	const returnToHome = () => {
+		store.setLoginError(null);
 		setIsRegistrationOpen(false);
 	};
 

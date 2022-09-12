@@ -218,67 +218,6 @@ div[class^="from_"].emoji::before {
     margin-top: 1rem !important;
 }
 
-/*.comment__msg {*/
-/*    width: 100%;*/
-/*    padding: 5px 10px;*/
-/*    background: #eeeeee;*/
-/*    border-top: 3px solid #eeeeee;*/
-/*    display: flex;*/
-/*    align-items: flex-end;*/
-/*}*/
-
-/*.comment__msg textarea {*/
-/*    padding: 10px 20px;*/
-/*    font-family: "Roboto", sans-serif;*/
-/*    width: 100%;*/
-/*    font-size: 1rem;*/
-/*    border: none;*/
-/*    border-radius: 10px;*/
-/*    outline: none;*/
-/*    background-color: #cccccc;*/
-/*    resize: none;*/
-/*}*/
-
-/*.comment__msg textarea:focus {*/
-/*    background-color: #dddddd;*/
-/*}*/
-
-/*.comment__msg img {*/
-/*    width: 30px;*/
-/*    margin: 5px;*/
-/*    background-color: #be961e;*/
-/*    padding: 7px;*/
-/*    border-radius: 50%;*/
-/*    filter: invert(100%);*/
-/*}*/
-
-/*.comment__msg_img {*/
-/*    min-height: 50px;*/
-/*    display: flex;*/
-/*    align-items: flex-end;*/
-/*    border: none*/
-/*}*/
-
-/*.comment__msg_img:hover img {*/
-/*    animation-duration: 1s;*/
-/*    animation-timing-function: ease-in-out;*/
-/*    animation-name: slidetop;*/
-/*    animation-iteration-count: 1;*/
-/*    cursor: pointer;*/
-/*}*/
-
-/*@keyframes slidetop {*/
-/*    0% {*/
-/*        margin-bottom: 5px;*/
-/*    }*/
-/*    50% {*/
-/*        margin-bottom: 12px;*/
-/*    }*/
-/*    100% {*/
-/*        margin-bottom: 5px;*/
-/*    }*/
-/*}*/
-
 .message__input {
     position: relative;
     width: 100%;
@@ -378,4 +317,16 @@ div[class^="from_"].emoji::before {
     100% {
         margin-bottom: 5px;
     }
+}
+
+.message_img {
+    flex-direction: column;
+}
+
+.message_img img {
+    max-width: 100%;
+    border-radius: 10px;
+    align-self: center;
+    object-fit: cover;
+    max-height: 300px;
 }

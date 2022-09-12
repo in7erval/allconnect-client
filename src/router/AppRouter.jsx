@@ -21,23 +21,23 @@ const AppRouter = () => {
 
 	return (store.isLoading ? <Loader/>
 			:
-		<Suspense fallback={
-			<div style={{
-				display: "flex",
-				alignItems: "center",
-				justifyContent: "center",
-				width: "100vw",
-				height: "80vh"
-			}}>
-				<Loader/>
-			</div>}>
-			<Routes>
-				{routes.map(route =>
-					<Route key={route.path} path={route.path} element={route.element(store.isAuth)}/>
-				)}
+			<Suspense fallback={
+				<div style={{
+					display: "flex",
+					alignItems: "center",
+					justifyContent: "center",
+					width: "100vw",
+					height: "80vh"
+				}}>
+					<Loader/>
+				</div>}>
+				<Routes>
+					{routes.map(route =>
+						<Route key={route.path} path={route.path} element={route.element(store.isAuth)}/>
+					)}
 
-			</Routes>
-		</Suspense>
+				</Routes>
+			</Suspense>
 
 	);
 };

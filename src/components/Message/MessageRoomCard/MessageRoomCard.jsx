@@ -2,6 +2,8 @@ import cl from "./MessageRoomCard.module.css";
 import userpic from "../../../assets/userpic.jpeg";
 import PropTypes from "prop-types";
 import Status from "../../UI/Status/Status";
+import LoadingImage from "../../UI/LoadingImage/LoadingImage";
+import LoaderForUserPic from "../../UI/Loader/LoaderForUserPic";
 
 const MessageRoomCard = ({user, id, messagePreview, messageTime, isUnread}) => {
 
@@ -17,7 +19,15 @@ const MessageRoomCard = ({user, id, messagePreview, messageTime, isUnread}) => {
 
 	return (
 		<div className={classname} key={id}>
-			<img src={user.picture ?? userpic} alt="Изображение недоступно"/>
+			<LoadingImage
+				showWhenLoading={
+					<div style={{marginRight: 20}}>
+						<LoaderForUserPic/>
+					</div>
+				}
+				src={user.picture ?? userpic}
+				alt="Изображение недоступно"
+			/>
 			<div className={cl.message_card_name}>
 				<div style={{display: "flex", alignItems: "center"}}>
 					<p>{user.lastName} {user.firstName}</p>

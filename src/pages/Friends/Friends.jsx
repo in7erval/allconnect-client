@@ -13,6 +13,8 @@ import {Link, useParams} from "react-router-dom";
 import Status from "../../components/UI/Status/Status";
 import {Context} from "../../index";
 import {observer} from "mobx-react-lite";
+import LoadingImage from "../../components/UI/LoadingImage/LoadingImage";
+import LoaderForUserPic from "../../components/UI/Loader/LoaderForUserPic";
 
 const createRoomId = (firstId, secondId) => firstId > secondId ? `${firstId}:${secondId}` : `${secondId}:${firstId}`;
 
@@ -28,6 +30,10 @@ const Friends = () => {
 	const [inputName, setInputName] = useState("");
 	const [friendTo, setFriendTo] = useState({});
 	const [isGlobal, setIsGlobal] = useState(false);
+
+	useEffect(() => {
+		document.title = `Друзья`;
+	});
 
 	const [fetchFriends, isLoading, _error] = useFetching(async () => {
 		if (!isGlobal) {
@@ -110,7 +116,11 @@ const Friends = () => {
 						{filteredFriends?.map(friend => (
 							<div key={friend._id} className={cl.main__friends_item}>
 								<Link to={`/user${friend._id}`}>
-									<img src={friend.picture ?? userpic} alt="Изображение недоступно"/>
+									<LoadingImage
+										src={friend.picture ?? userpic}
+										alt="Изображение недоступно"
+										showWhenLoading={<LoaderForUserPic/>}
+									/>
 								</Link>
 								<div className={cl.main__friends_item__info}>
 									<Link to={`/user${friend._id}`}>
@@ -137,7 +147,11 @@ const Friends = () => {
 				<div className={cl.modal}>
 					<Link to={`/user${friendTo._id}`}>
 						<div className={cl.modal_header}>
-							<img src={friendTo.picture ?? userpic} alt={"pic for " + friendTo.firstName}/>
+							<LoadingImage
+								src={friendTo.picture ?? userpic}
+								alt={"pic for " + friendTo.firstName}
+								showWhenLoading={<LoaderForUserPic/>}
+							/>
 							<p><b>{friendTo.firstName} {friendTo.lastName}</b></p>
 						</div>
 					</Link>

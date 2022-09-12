@@ -17,7 +17,7 @@ function App() {
 				<AppRouter/>
 				<PopupErrors/>
 			</BrowserRouter>
-			<ReactQueryDevtools initialIsOpen/>
+			<ReactQueryDevtools/>
 		</QueryClientProvider>
 	)
 }

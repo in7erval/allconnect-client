@@ -59,33 +59,35 @@ const LoginForm = ({setIsRegistrationOpen}) => {
 			</div>
 			<form className={cl.login_form} onSubmit={sendData}>
 				<div className={cl.login_form__input_group}>
-					<label htmlFor="email">Электронная почта</label>
 					<input
 						id="email"
 						type="email"
 						autoFocus={true}
 						required={true}
 						autoComplete="email"
+						placeholder="Электронная почта"
 						value={email}
 						onChange={event_ => setEmail(event_.target.value)}
 					/>
 				</div>
-				<div className={cl.login_form__input_group}>
-					<div className={cl.login_form__password_and_pic}>
-						<label htmlFor="current-password">Пароль</label>
-						<div onClick={() => setPasswordVisible(!passwordVisible)}>
-							{passwordVisible ? <i className="bi bi-eye-fill"></i> : <i className="bi bi-eye"></i>}
-						</div>
-					</div>
+				<div className={cl.login_form__input_group} style={{flexDirection: "row", justifyContent: "space-between"}}>
 					<input
 						id="current-password"
+						placeholder="Пароль"
 						required={true}
 						type={passwordVisible ? "text" : "password"}
 						onChange={event_ => setPassword(event_.target.value)}
-						className={passwordVisible ? "" : "ls-5"}
 						value={password}
+						style={{flex: 1}}
 					/>
+					<div
+						onClick={() => setPasswordVisible(!passwordVisible)}
+						style={{marginLeft: 10, display: "flex", alignItems: "center"}}
+					>
+						{passwordVisible ? <i className="bi bi-eye-fill"></i> : <i className="bi bi-eye"></i>}
+					</div>
 				</div>
+				{store.loginError && <div className={cl.login_error}>{store.loginError}</div>}
 				<div style={{
 					display: "flex",
 					alignItems: 'center',
@@ -103,7 +105,10 @@ const LoginForm = ({setIsRegistrationOpen}) => {
 
 			</form>
 			<button className={cl.login_page__login_button + " " + cl.btn_register_color}
-							onClick={() => setIsRegistrationOpen(true)}>
+							onClick={() => {
+								store.setLoginError(null);
+								setIsRegistrationOpen(true);
+							}}>
 				Зарегистрироваться
 			</button>
 		</div>

@@ -3,6 +3,8 @@ import cl from "./NotificationsNav.module.css";
 import {createPortal} from "react-dom";
 import {Context} from "../../../index";
 import {observer} from "mobx-react-lite";
+import LoadingImage from "../../UI/LoadingImage/LoadingImage";
+import LoaderForUserPic from "../../UI/Loader/LoaderForUserPic";
 
 
 const postText = (text, action) => {
@@ -58,17 +60,11 @@ const NotificationsNav = () => {
 										<div style={{marginRight: 10}}>
 											{mapActionToSVG(notification.type)}
 										</div>
-										<div>
-											<img
+										<div className={cl.user_pic}>
+											<LoadingImage
+												showWhenLoading={<LoaderForUserPic/>}
 												src={notification.additionalInfo.user.picture}
 												alt={"Изображение недоступно"}
-												style={{
-													width: 40,
-													height: 40,
-													borderRadius: "50%",
-													objectFit: "cover",
-													marginRight: 10
-												}}
 											/>
 										</div>
 										<p style={{fontSize: '0.75rem'}}>

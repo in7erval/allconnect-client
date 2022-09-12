@@ -98,10 +98,6 @@ body {
     width: 400px;
 }
 
-.ls-5 {
-    letter-spacing: 5px;
-}
-
 @media (max-width: 400px) {
 
     .w-400 {

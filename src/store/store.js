@@ -10,6 +10,7 @@ export default class Store {
 	isAuth = false;
 	isLoading = false;
 	errors = [];
+	loginError = null;
 	onlineUsers = [];
 	unreadMessages = [];
 	notifications = [];
@@ -70,6 +71,11 @@ export default class Store {
 		this.errors = [...this.errors, error];
 	}
 
+	setLoginError(error) {
+		console.log('add new error', error);
+		this.loginError = error;
+	}
+
 	deleteError(index) {
 		this.errors = this.errors.filter((v, index_) => index_ !== index);
 	}
@@ -80,6 +86,7 @@ export default class Store {
 
 	async login(email, password) {
 		try {
+			this.setLoginError(null);
 			const response = await UserAuthService.login(email, password);
 			console.log('login', response);
 			localStorage.setItem(TOKEN, response.data.accessToken);
@@ -90,13 +97,15 @@ export default class Store {
 			this.setAuth(true);
 			this.setUser(response.data.user);
 		} catch (error) {
-			console.error("ERROR", error);
-			// console.error(error?.response?.data?.message);
+			console.debug("ERROR", error);
+			console.error(error?.response?.data?.message);
+			this.setLoginError(error?.response?.data?.message);
 		}
 	}
 
 	async registration(email, password, firstName, lastName) {
 		try {
+			this.setLoginError(null);
 			const response = await UserAuthService.registration(email, password, firstName, lastName);
 			console.log('registration', response);
 			localStorage.setItem(TOKEN, response.data.accessToken);
@@ -108,6 +117,7 @@ export default class Store {
 			this.setUser(response.data.user);
 		} catch (error) {
 			console.error(error.response?.data?.message);
+			this.setLoginError(error?.response?.data?.message);
 		}
 	}
 

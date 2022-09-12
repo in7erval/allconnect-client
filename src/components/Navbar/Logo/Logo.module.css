@@ -1,42 +1,23 @@
 .logo_all {
+    margin-left: 10px;
     display: flex;
     align-items: center;
     height: 100%;
 }
 
-.logo_img {
-    width: 25px;
-    height: 25px;
-    margin-right: 10px;
-}
-
 .logo_text {
     display: flex;
-    height: 25px;
-    font-weight: 500;
     font-size: 20px;
     text-decoration: none;
     font-family: 'Zen Dots', 'Roboto', cursive;
-}
-
-.logo_text_small {
-    display: flex;
-    height: 25px;
-    font-weight: 500;
-    font-size: 20px;
-    text-decoration: none;
-    font-family: 'Zen Dots', 'Roboto', cursive;
-}
-
-.logo_text_small {
-    display: none;
 }
 
 @media (max-width: 500px) {
     .logo_text {
-        display: none;
+        font-size: 25px;
     }
-    .logo_text_small {
-        display: block;
+
+    .logo_text span {
+        display: none;
     }
 }

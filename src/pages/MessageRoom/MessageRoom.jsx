@@ -12,6 +12,8 @@ import Loader from "../../components/UI/Loader/Loader";
 import Status from "../../components/UI/Status/Status";
 import {Context} from "../../index";
 import {observer} from "mobx-react-lite";
+import LoadingImage from "../../components/UI/LoadingImage/LoadingImage";
+import LoaderForUserPic from "../../components/UI/Loader/LoaderForUserPic";
 
 const datetimeToDate = datetime => new Date(datetime).toLocaleDateString();
 
@@ -74,6 +76,10 @@ const MessageRoom = () => {
 	const messagesMap = useMemo(() => groupMessages(messages), [messages]);
 
 	useEffect(() => {
+		document.title = "Сообщения";
+	});
+
+	useEffect(() => {
 		setTimeout(
 			scrollToBottom, 500);
 	}, [messagesMap]);
@@ -123,7 +129,11 @@ const MessageRoom = () => {
 									<Status userId={user._id}/>
 								</div>
 							</div>
-							<img src={user.picture ?? userpic} alt="Изображение недоступно"/>
+							<LoadingImage
+								showWhenLoading={<LoaderForUserPic/>}
+								src={user.picture ?? userpic}
+								alt="Изображение недоступно"
+							/>
 						</div>
 					</Link>
 					<div className={cl.messages}>

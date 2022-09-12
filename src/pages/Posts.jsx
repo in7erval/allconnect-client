@@ -1,17 +1,21 @@
 import React, {useContext, useEffect} from 'react';
-import Loader from "../components/UI/Loader/Loader";
 import PostList from "../components/Post/PostList";
 import PostService from "../API/PostService";
 import {useInfiniteQuery} from "@tanstack/react-query";
 import {useInView} from "react-intersection-observer";
 import {Context} from "../index";
 import {observer} from "mobx-react-lite";
+import LoaderPostList from "../components/UI/Loader/LoaderPostList";
 
 function Posts() {
 	const LIMIT_POSTS = 10;
 	const {store} = useContext(Context);
 	const userId = store.userId;
 	const {ref: lastElement, inView} = useInView();
+
+	useEffect(() => {
+		document.title = "Новости";
+	});
 
 	const fetchPosts = ({pageParam: pageParameter = 1}) => {
 		return PostService.getAllForUser(userId, LIMIT_POSTS, pageParameter);
@@ -45,15 +49,7 @@ function Posts() {
 
 	return (
 		<>
-			{isLoading ?
-				<div style={{
-					display: "flex",
-					justifyContent: 'center',
-					marginTop: 50
-				}}>
-					<Loader/>
-				</div>
-				:
+			{isLoading ? <LoaderPostList/> :
 				data.pages.map((group, index) => (
 					<React.Fragment key={index}>
 						<PostList

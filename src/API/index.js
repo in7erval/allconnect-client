@@ -31,6 +31,7 @@ const authInterceptorOnRejected = async error => {
 		}
 		throw error;
 	}
+	throw error;
 }
 
 $authApi.interceptors.response.use(config => config, authInterceptorOnRejected);
