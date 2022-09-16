@@ -26,6 +26,10 @@ const Login = () => {
 		setCursorY(yCenter);
 	}, []);
 
+	useEffect(() => {
+		document.title = 'Allconnect';
+	});
+
 	return (
 		<div
 			className={cl.login_page}
@@ -91,8 +95,8 @@ const Login = () => {
 			<div
 				style={{
 					position: "fixed",
-					top: cursorY - 100,
-					left: cursorX - 100,
+					top: (cursorY ?? 100) - 100,
+					left: (cursorX ?? 100) - 100,
 					width: 200,
 					height: 200,
 					borderRadius: '50%',

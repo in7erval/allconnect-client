@@ -120,10 +120,12 @@
     width: 75px;
     object-fit: cover;
     border-radius: 50%;
-    animation-name: smooth-scale-reverse;
-    animation-duration: 0.5s;
-    animation-iteration-count: 1;
-    animation-fill-mode: forwards;
+    transition: transform 250ms;
+    transition-timing-function: ease-in-out;
+    /*animation-name: smooth-scale-reverse;*/
+    /*animation-duration: 0.5s;*/
+    /*animation-iteration-count: 1;*/
+    /*animation-fill-mode: forwards;*/
     display: flex;
     align-items: center;
     justify-content: center;
@@ -133,10 +135,11 @@
 }
 
 .main__friends img:hover {
-    animation-name: smooth-scale;
-    animation-duration: 0.5s;
-    animation-iteration-count: 1;
-    animation-fill-mode: forwards;
+    transform: scale(1.1);
+    /*animation-name: smooth-scale;*/
+    /*animation-duration: 0.5s;*/
+    /*animation-iteration-count: 1;*/
+    /*animation-fill-mode: forwards;*/
 }
 
 @keyframes smooth-scale {

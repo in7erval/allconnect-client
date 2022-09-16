@@ -1,12 +1,14 @@
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 import cl from './Message.module.css';
 import TextareaAutosize from "react-textarea-autosize";
 import PropTypes from "prop-types";
 import Loader from "../UI/Loader/Loader";
 
 import Picker from "@emoji-mart/react";
-import data from "../../assets/emojimart.json";
+// import data from "../../assets/emojimart.json";
+import data from '@emoji-mart/data';
 import {useFile} from "../../hooks/useFile";
+import Draggable from "react-draggable";
 
 const MessageInput = ({sendMessage, message}) => {
 	const [text, setText] = useState('');
@@ -28,12 +30,6 @@ const MessageInput = ({sendMessage, message}) => {
 		sendMessage(message);
 		setText('');
 	}
-
-	useEffect(() => {
-		const array = [...text];
-		console.log(array);
-		console.log(array.filter(element => /\p{Emoji}/u.test(element)));
-	}, [text]);
 
 	return (
 		<div>
@@ -87,25 +83,33 @@ const MessageInput = ({sendMessage, message}) => {
 				>
 					<i className={`bi bi-emoji-smile${showEmojiPicker ? "-fill" : ""}`}></i>
 					{showEmojiPicker &&
-						<div
-							style={{
-								position: 'absolute',
-								right: 20,
-								bottom: 80,
-								zIndex: 2,
-								display: "flex",
-								alignItems: "center",
-								justifyContent: "right",
-								marginRight: 10
-							}}
-							onClick={event => event.stopPropagation()}
-						>
-							<Picker
-								data={data}
-								onEmojiSelect={(element) => setText(text + element.native)}
-								theme="light"
-								locale="ru"/>
-						</div>
+						<Draggable>
+							<div
+								style={{
+									position: 'absolute',
+									right: 20,
+									bottom: 80,
+									zIndex: 2,
+									display: "flex",
+									alignItems: "center",
+									justifyContent: "right",
+									marginRight: 10,
+									padding: 10,
+									backgroundColor: 'lightgray',
+									borderRadius: 10,
+									boxShadow: 'black 0 0 50px 10px',
+									cursor: 'pointer'
+								}}
+								onClick={event => event.stopPropagation()}
+							>
+								<Picker
+									data={data}
+									onEmojiSelect={(element) => setText(text + element.native)}
+									theme="light"
+									locale="ru"
+								/>
+							</div>
+						</Draggable>
 					}
 				</button>
 

@@ -21,7 +21,7 @@ const RegistrationForm = ({returnToHome}) => {
 	return (
 		<div className={cl.login_page__login}>
 			<div className={cl.login_page__login_title}>
-				Регистрация в allconnect
+				Регистрация в <span>allconnect</span>
 			</div>
 			<form className={cl.registration_form} onSubmit={sendData}>
 				<div className={cl.login_form__input_group}>

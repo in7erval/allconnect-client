@@ -54,7 +54,7 @@ const LoginForm = ({setIsRegistrationOpen}) => {
 			<div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column'}}>
 				{/*<img src={logo} className={cl.logo} alt="logo"/>*/}
 				<div className={cl.login_page__login_title}>
-					allconnect
+					<span>allconnect</span>
 				</div>
 			</div>
 			<form className={cl.login_form} onSubmit={sendData}>

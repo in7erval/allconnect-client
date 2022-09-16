@@ -15,7 +15,7 @@ import LoaderForImage from "../UI/Loader/LoaderForImage";
 
 const PostItem = ({post}) => {
 
-	const {store} = useContext(Context);
+	const {store, storeModalImage, storePosts} = useContext(Context);
 	const loggedUserId = store.userId;
 	const [showComments, setShowComments] = useState(false);
 	const [isOwner, setIsOwner] = useState(false);
@@ -74,7 +74,21 @@ const PostItem = ({post}) => {
 					{new Date(post.publishDate).toLocaleString()}
 				</div>
 				<div className={cl.post__content}>
-					{post.image && <LoadingImage src={post.image} alt="Pic" showWhenLoading={<LoaderForImage/>}/>}
+					{post.image &&
+						<LoadingImage
+							src={post.image}
+							alt="Pic"
+							showWhenLoading={<LoaderForImage/>}
+							onClick={() =>
+								storeModalImage.initModal(post.image,
+									{
+										firstName: post.owner.firstName,
+										lastName: post.owner.lastName,
+										id: post.owner._id,
+										picture: post.owner.picture
+									})
+							}
+						/>}
 					<div>
 						{post.text}
 					</div>
@@ -120,7 +134,10 @@ const PostItem = ({post}) => {
 					</button>
 				</div>
 				{isOwner &&
-					<button onClick={() => PostService.delete(post._id)} className={cl.post__btns_btn_delete}>
+					<button onClick={async () => {
+						await PostService.delete(post._id);
+						storePosts.setReloadPosts(true);
+					}} className={cl.post__btns_btn_delete}>
 						Удалить
 					</button>
 				}

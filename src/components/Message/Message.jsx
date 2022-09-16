@@ -27,7 +27,7 @@ const Message = (
 		toUserId
 	}
 ) => {
-	const {store} = useContext(Context);
+	const {store, storeModalImage} = useContext(Context);
 	const userId = store.userId;
 
 	const {ref: reference, inView: isVisible} = useInView({
@@ -91,6 +91,16 @@ const Message = (
 								src={message.picture}
 								alt="Изображение недоступно"
 								showWhenLoading={<LoaderForImage/>}
+								onClick={() => storeModalImage.initModal(
+									message.picture,
+									{
+										firstName: message.user.firstName,
+										lastName: message.user.lastName,
+										id: message.user._id,
+										picture: message.user.picture ?? userpic
+									},
+									"message"
+								)}
 							/>
 						}
 						<div>

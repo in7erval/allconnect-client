@@ -79,8 +79,8 @@
 }
 
 .loader_image {
-    width: 300px;
-    height: 300px;
+    width: 200px;
+    height: 250px;
     background-color: #eeeeee;
     align-self: center;
     border-radius: 10px;

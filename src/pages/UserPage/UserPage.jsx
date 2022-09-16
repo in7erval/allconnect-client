@@ -4,8 +4,6 @@ import UserService from "../../API/UserService";
 import PostList from "../../components/Post/PostList";
 import userpic from "../../assets/userpic.jpeg";
 import cl from "./UserPage.module.css";
-import MyModal from "../../components/UI/MyModal/MyModal";
-import ImageUploader from "../../components/UI/ImageUploader/ImageUploader";
 import PostForm from "../../components/Post/PostForm/PostForm.jsx";
 import Status from "../../components/UI/Status/Status";
 import {useInView} from "react-intersection-observer";
@@ -13,49 +11,27 @@ import {useInfiniteQuery, useQuery} from "@tanstack/react-query";
 import {Context} from "../../index";
 import {observer} from "mobx-react-lite";
 import LoadingImage from "../../components/UI/LoadingImage/LoadingImage";
-import LoaderForImage from "../../components/UI/Loader/LoaderForImage";
 import LoaderForUserPic from "../../components/UI/Loader/LoaderForUserPic";
 import LoaderPostList from "../../components/UI/Loader/LoaderPostList";
 import LoaderText from "../../components/UI/Loader/LoaderText";
+import UserPageInfo from "./blocks/UserPageInfo/UserPageInfo";
+import LoaderUserInfo from "./blocks/UserPageInfo/LoaderUserInfo";
 
 const determineIsFriend = (userFriendsId, friendId) => {
 	return userFriendsId.map(element => element._id).includes(friendId);
 }
 
-const createRoomId = (firstId, secondId) => firstId > secondId ? `${firstId}:${secondId}` : `${secondId}:${firstId}`;
-
-
-const LoaderUserInfo = () => {
-	return <div className={cl.user_page__pic_name}>
-		<div className={cl.user_page__pic_and_btns}>
-			<div className={cl.user_pic}>
-				<LoaderForImage/>
-			</div>
-		</div>
-		<div className={cl.user_page__info_stats}>
-			<div className={cl.user_page__info}>
-				<div style={{display: "flex", flexDirection: "row", marginBottom: 10, width: '100%', justifyContent: "space-evenly"}}>
-					<LoaderText/>
-					<LoaderText/>
-				</div>
-				<div style={{backgroundColor: "lightgray", width: "100%", height: 1}}></div>
-				<div style={{marginTop: 10}}>
-					<LoaderText/>
-				</div>
-			</div>
-			<div className={cl.user_page__stats}>
-				<Link to={`#`}>
-					<LoaderText/>
-					{/*<div>{userResponse.data?.friends?.length}</div>*/}
-					<p>друзей</p>
-				</Link>
-				<Link to="#" aria-disabled={true} className={cl.disabled_link}>
-					<LoaderText/>
-					<p>записей</p>
-				</Link>
-			</div>
-		</div>
-	</div>
+// todo: super не оптимизировано!!! O(n^2)!!!!
+const determineMutualFriends = (friends1, friends2) => {
+	const mutualFriends = [];
+	for (let friend1 of friends1) {
+		for (let friend2 of friends2) {
+			if (friend1._id === friend2._id) {
+				mutualFriends.push(friend1);
+			}
+		}
+	}
+	return mutualFriends;
 }
 
 const LoaderFriends = () => {
@@ -90,33 +66,38 @@ const LoaderFriends = () => {
 const UserPage = () => {
 		const LIMIT_POSTS = 10;
 		const pageUserId = useParams().id;
-		const {store} = useContext(Context);
+		const {store, storePosts} = useContext(Context);
 		const loggedUserId = store.userId;
 		const isOwner = pageUserId === loggedUserId;
 		const [showAllFriends, setShowAllFriends] = useState(false);
+		const [showAllMutualFriends, setShowAllMutualFriends] = useState(false);
 		const [isFriend, setIsFriend] = useState(false);
 		const {ref: lastElement, inView} = useInView();
-		const [showImageUploader, setShowImageUploader] = useState(false);
-		// const [editedFirstName, setEditedFirstName] = useState("");
-		// const [editedLastName, setEditedLastName] = useState("");
 
-		const addFriend = async () => {
-			await UserService.addFriend(loggedUserId, pageUserId)
-				.then(() => console.debug("successfully added friend"))
-				.catch(error => store.addError(error));
-			setIsFriend(true);
-		};
+		const [mutualFriends, setMutualFriends] = useState([]);
 
-		const deleteFriend = async () => {
-			await UserService.deleteFriend(loggedUserId, pageUserId)
-				.then(() => console.debug("successfully deleted friend"))
-				.catch(error => store.addError(error));
-			setIsFriend(false);
-		}
 
 		const fetchUser = async () => {
 			return UserService.getFullById(pageUserId);
 		}
+
+		const fetchLoggedUser = async () => {
+			return UserService.getFullById(loggedUserId);
+		}
+
+		useEffect(() => {
+			console.log("reloadPosts", storePosts.reloadPosts)
+			if (storePosts.reloadPosts) {
+				refetch();
+				storePosts.setReloadPosts(false);
+			}
+		}, [storePosts.reloadPosts]);
+
+		const {
+			isLoading: isLoadingLoggedUser,
+			data: loggedUserResponse,
+			refetch: refetchLoggedUser
+		} = useQuery(["loggedUser"], fetchLoggedUser);
 
 		const {
 			isLoading: isLoadingUser,
@@ -126,8 +107,9 @@ const UserPage = () => {
 		} = useQuery([`user${pageUserId}`], fetchUser);
 
 		useEffect(() => {
-			if (!isFetching && !isOwner) {
+			if (!isFetching && !isOwner && !isLoadingLoggedUser) {
 				setIsFriend(determineIsFriend(userResponse.data.friends, loggedUserId));
+				setMutualFriends(determineMutualFriends(loggedUserResponse.data.friends, userResponse.data.friends));
 			}
 			if (!isFetching) {
 				document.title = `${userResponse.data.firstName} ${userResponse.data.lastName}`;
@@ -149,7 +131,7 @@ const UserPage = () => {
 			fetchNextPage,
 			hasNextPage,
 			refetch
-		} = useInfiniteQuery(['userPosts'], fetchPosts, {
+		} = useInfiniteQuery([`userPosts${pageUserId}`], fetchPosts, {
 			getNextPageParam: (lastPage, _pages) => {
 				let lastPageNumber = lastPage.config.params.page;
 				return LIMIT_POSTS * lastPageNumber < lastPage.data.count ? lastPageNumber + 1 : undefined;
@@ -160,6 +142,7 @@ const UserPage = () => {
 			console.log("fetch posts with another id");
 			refetch();
 			refetchUser();
+			refetchLoggedUser();
 		}, [pageUserId]);
 
 		useEffect(() => {
@@ -177,82 +160,17 @@ const UserPage = () => {
 		// };
 
 		const indexForFriendsArray = showAllFriends ? undefined : 6;
+		const indexForMutualFriendsArray = showAllMutualFriends ? undefined : 6;
 
-		/* todo: fix loader */
 		return (
 			<div className={cl.user_page + " justify-content-start"}>
-				{isLoadingUser || isLoadingPosts ? <LoaderUserInfo/> :
-					<div className={cl.user_page__pic_name}>
-						<div className={cl.user_page__pic_and_btns}>
-							<div className={cl.user_pic}>
-								<LoadingImage
-									src={userResponse.data.picture ?? userpic}
-									alt={"Изображение недоступно"}
-									showWhenLoading={<LoaderForImage/>}/>
-							</div>
-							<div className={cl.user_pic_btns}>
-								{isOwner &&
-									<button onClick={() => setShowImageUploader(true)} className={cl.user_button}>
-										Загрузить фото
-									</button>
-								}
-								{!isOwner &&
-									<div>
-										<Link to={`/messages/${createRoomId(pageUserId, loggedUserId)}`}>
-											Написать сообщение
-										</Link>
-									</div>}
-								{!isOwner && (!isFriend ?
-									(<button onClick={addFriend}>
-										Добавить в друзья
-									</button>) :
-									(<button className={cl.danger} onClick={deleteFriend}>
-										Удалить из друзей
-									</button>))
-								}
-							</div>
-						</div>
-						<div className={cl.user_page__info_stats}>
-							<div className={cl.user_page__info}>
-								<div style={{display: "flex", flexDirection: "column"}}>
-									<div style={{marginRight: -15, marginTop: -15, height: 20, alignSelf: "flex-end"}}>
-										<Status userId={pageUserId}/>
-									</div>
-									<h2>{userResponse.data.lastName} {userResponse.data.firstName}</h2>
-
-									{/* fixme: Убрал редактирование имени, сделать отдельную страницу*/}
-									{/*{isOwner ? (*/}
-									{/*		<form onSubmit={changeName}>*/}
-									{/*			<FlexibleInput*/}
-									{/*				content={editedLastName}*/}
-									{/*				onChange={event_ => setEditedLastName(event_.target.value)}*/}
-									{/*			/>*/}
-									{/*			<FlexibleInput*/}
-									{/*				content={editedFirstName}*/}
-									{/*				onChange={event_ => setEditedFirstName(event_.target.value)}*/}
-									{/*			/>*/}
-									{/*			<button type="submit" hidden/>*/}
-									{/*		</form>*/}
-									{/*	) :*/}
-									{/*	(<h2>{userResponse.data.lastName} {userResponse.data.firstName}</h2>)*/}
-									{/*}*/}
-
-								</div>
-								<div style={{backgroundColor: "lightgray", width: "100%", height: 1}}></div>
-								<p style={{fontSize: "0.9rem", color: "gray"}}>Информация отсутствует</p>
-							</div>
-							<div className={cl.user_page__stats}>
-								<Link to={`/friends/${isOwner ? "" : pageUserId}`}>
-									<div>{userResponse.data?.friends?.length}</div>
-									<p>друзей</p>
-								</Link>
-								<Link to="#" aria-disabled={true} className={cl.disabled_link}>
-									<div>{postsData.pages[0].data.count}</div>
-									<p>записей</p>
-								</Link>
-							</div>
-						</div>
-					</div>
+				{isLoadingUser || isLoadingPosts || isLoadingLoggedUser ? <LoaderUserInfo/> :
+					<UserPageInfo
+						userData={userResponse.data}
+						mutualFriendsCount={mutualFriends.length}
+						postsCount={postsData.pages[0].data.count}
+						isFriend={isFriend}
+					/>
 				}
 
 				<div style={{
@@ -261,37 +179,79 @@ const UserPage = () => {
 					justifyContent: 'center'
 				}}>
 					{isLoadingUser ? <LoaderFriends/> : (
-						<div className={cl.user_page__friends}>
-							<Link to={`/friends/${isOwner ? "" : pageUserId}`}>
-								<div className={cl.user_page__friends_header}>
-									<div>Друзья</div>
-									<div>
-										<p>{userResponse.data?.friends?.length}</p>
+						<div style={{
+							display: 'flex',
+							// justifyContent: 'center',
+							alignItems: 'center',
+							flexDirection: 'column'
+						}}>
+							<div className={cl.user_page__friends}>
+								<Link to={`/friends/${isOwner ? "" : pageUserId}`}>
+									<div className={cl.user_page__friends_header}>
+										<div>Друзья</div>
+										<div>
+											<p>{userResponse.data?.friends?.length}</p>
+										</div>
 									</div>
-								</div>
-							</Link>
-							<div className={cl.user_page__friends_imgs}>
-								{userResponse.data?.friends?.slice(0, indexForFriendsArray)?.map(element =>
-									(<Link key={element._id} to={"/user" + element._id} className="tooltip">
-											<span className="tooltiptext">{element.lastName} {element.firstName}</span>
-											<LoadingImage
-												src={element.picture ?? userpic}
-												alt="Изображение недоступно"
-												showWhenLoading={<LoaderForUserPic/>}
-											/>
-											<div style={{position: "relative", top: -20, right: 10}}>
-												<Status userId={element._id} disableHover={true}/>
-											</div>
-										</Link>
+								</Link>
+								<div className={cl.user_page__friends_imgs}>
+									{userResponse.data?.friends?.slice(0, indexForFriendsArray)?.map(element =>
+										(<Link key={element._id} to={"/user" + element._id} className="tooltip">
+												<span className="tooltiptext">{element.lastName} {element.firstName}</span>
+												<LoadingImage
+													src={element.picture ?? userpic}
+													alt="Изображение недоступно"
+													showWhenLoading={<LoaderForUserPic/>}
+												/>
+												<div style={{position: "relative", top: -20, right: 10}}>
+													<Status userId={element._id} disableHover={true}/>
+												</div>
+											</Link>
+										)
 									)
-								)
+									}
+								</div>
+								{userResponse.data?.friends?.length > 6 &&
+									<button className={cl.user_page__friends_imgs__helper_btn}
+													onClick={() => setShowAllFriends(!showAllFriends)}>
+										{showAllFriends ? "Скрыть" : "Показать всех"}
+									</button>
 								}
 							</div>
-							{userResponse.data?.friends?.length > 6 &&
-								<button className={cl.user_page__friends_imgs__helper_btn}
-												onClick={() => setShowAllFriends(!showAllFriends)}>
-									{showAllFriends ? "Скрыть" : "Показать всех"}
-								</button>
+							{!isOwner &&
+								<div className={cl.user_page__friends}>
+									<div>
+										<div className={cl.user_page__friends_header}>
+											<div>Общие друзья</div>
+											<div>
+												<p>{mutualFriends.length}</p>
+											</div>
+										</div>
+									</div>
+									<div className={cl.user_page__friends_imgs}>
+										{mutualFriends.slice(0, indexForMutualFriendsArray)?.map(element =>
+											(<Link key={element._id} to={"/user" + element._id} className="tooltip">
+													<span className="tooltiptext">{element.lastName} {element.firstName}</span>
+													<LoadingImage
+														src={element.picture ?? userpic}
+														alt="Изображение недоступно"
+														showWhenLoading={<LoaderForUserPic/>}
+													/>
+													<div style={{position: "relative", top: -20, right: 10}}>
+														<Status userId={element._id} disableHover={true}/>
+													</div>
+												</Link>
+											)
+										)
+										}
+									</div>
+									{mutualFriends.length > 6 &&
+										<button className={cl.user_page__friends_imgs__helper_btn}
+														onClick={() => setShowAllMutualFriends(!showAllMutualFriends)}>
+											{showAllMutualFriends ? "Скрыть" : "Показать всех"}
+										</button>
+									}
+								</div>
 							}
 						</div>
 					)}
@@ -319,17 +279,7 @@ const UserPage = () => {
 					</div>
 
 				</div>
-				{isOwner && !isLoadingUser &&
-					<MyModal
-						visible={showImageUploader}
-						setVisible={setShowImageUploader}
-					>
-						<ImageUploader
-							setModalVisible={setShowImageUploader}
-							currentImg={userResponse.data?.picture ?? userpic}
-						/>
-					</MyModal>
-				}
+
 			</div>
 		);
 	}

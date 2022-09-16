@@ -28,7 +28,7 @@ const Nav = ({activeClassName}) => {
 				<NavLink to="/messages" className={({isActive}) => isActive ? activeClassName : ""}>
 					<i className="bi bi-chat-text"></i>
 					<div>Сообщения</div>
-					<p>{store.countUnreadMessages > 0 ? store.countUnreadMessages : ""}</p>
+					{store.countUnreadMessages > 0 && <p>store.countUnreadMessages</p>}
 				</NavLink>
 			</li>
 			<li>

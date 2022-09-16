@@ -4,10 +4,11 @@ import {observer} from "mobx-react-lite";
 import BackgroundWork from "./BackgroundWork";
 import {useContext} from "react";
 import {Context} from "../index";
+import ModalImage from "./UI/ModalImage/ModalImage";
 
 const DefaultPage = ({children}) => {
 
-	const {store} = useContext(Context);
+	const {store, storeModalImage} = useContext(Context);
 
 	return (
 		<div className="default_page">
@@ -16,6 +17,13 @@ const DefaultPage = ({children}) => {
 				{children}
 			</div>
 			{store.isAuth && <BackgroundWork/>}
+			<ModalImage
+				setShowModal={(value) => storeModalImage.setShowModal(value)}
+				userData={storeModalImage.userData}
+				imageUrl={storeModalImage.imageUrl}
+				showModal={storeModalImage.showModal}
+				type={storeModalImage.type}
+			/>
 		</div>
 	);
 };

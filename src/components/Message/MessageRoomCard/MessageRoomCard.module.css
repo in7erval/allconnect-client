@@ -5,15 +5,13 @@
     padding: 0 10px;
     border-radius: 5px;
     display: flex;
-    /*justify-content: space-between;*/
     align-items: center;
     border: none;
     font-family: "Roboto", sans-serif;
     font-size: 1rem;
-    animation-name: smooth-scale-reverse;
-    animation-duration: 0.25s;
-    animation-timing-function: ease-in-out;
-    animation-fill-mode: forwards;
+    transition: all 250ms;
+    transition-timing-function: ease-in-out;
+    cursor: pointer;
     margin-bottom: 20px;
 }
 
@@ -58,11 +56,7 @@
 }
 
 .message_card:hover {
-    cursor: pointer;
-    animation-name: smooth-scale;
-    animation-duration: 0.25s;
-    animation-timing-function: ease-in-out;
-    animation-fill-mode: forwards;
+    transform: scale(1.05);
 }
 
 .unread {
@@ -71,26 +65,6 @@
 
 .unread p {
     font-weight: bold;
-}
-
-@keyframes smooth-scale {
-    from {
-        transform: scale(1);
-    }
-
-    to {
-        transform: scale(1.05);
-    }
-}
-
-@keyframes smooth-scale-reverse {
-    from {
-        transform: scale(1.05);
-    }
-
-    to {
-        transform: scale(1);
-    }
 }
 
 .status {

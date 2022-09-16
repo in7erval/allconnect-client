@@ -59,9 +59,9 @@ const UserService = {
 		});
 	},
 
-	changeName: async (userId, firstName, lastName) => {
+	update: async (userData) => {
 		return $authApi.post(`/users/update`, {
-			userId, firstName, lastName
+			...userData
 		});
 	},
 
@@ -77,7 +77,8 @@ const UserService = {
 				}
 			}
 		);
-	}
+	},
+
 
 };
 

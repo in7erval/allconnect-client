@@ -63,10 +63,14 @@
 .login_page__login_title {
     font-size: 25px;
     margin-top: 10px;
-    font-family: 'Zen Dots', 'Roboto', cursive;
+    font-family: "Roboto", sans-serif;
     color: black;
     text-align: center;
     margin-bottom: 20px;
+}
+
+.login_page__login_title span {
+    font-family: 'Zen Dots', 'Roboto', cursive;
 }
 
 .btn_default_color {

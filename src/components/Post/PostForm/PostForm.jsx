@@ -6,14 +6,17 @@ import PostService from "../../../API/PostService";
 import {Context} from "../../../index";
 import {observer} from "mobx-react-lite";
 import Picker from "@emoji-mart/react";
-import data from "../../../assets/emojimart.json";
+// import data from "../../../assets/emojimart.json";
+import data from '@emoji-mart/data';
 import Loader from "../../UI/Loader/Loader";
 import {useFile} from "../../../hooks/useFile";
+import Draggable from "react-draggable";
+
 
 const PostForm = () => {
 
 	const [postMessage, setPostMessage] = useState("");
-	const {store} = useContext(Context);
+	const {store, storePosts} = useContext(Context);
 	const userId = store.userId;
 	// const navigate = useNavigate();
 	const [textareaFocused, setTextareaFocused] = useState(false);
@@ -29,13 +32,16 @@ const PostForm = () => {
 
 	const addNewPost = async (event_) => {
 		event_.preventDefault();
-		if (!postMessage || files.length === 0) return;
+		if (postMessage.length === 0 && files.length === 0) return;
 		console.log("new post!", postMessage);
 		const datas = await loadImages(`post_${userId}`);
 		console.log(datas);
 		await PostService.addNewPost(userId, postMessage, datas[0])
 			// .then(() => navigate(0))
 			.catch(error => store.addError(error));
+		setPostMessage("");
+		storePosts.setReloadPosts(true);
+
 	};
 
 	return (
@@ -71,6 +77,7 @@ const PostForm = () => {
 			}
 			<div className={cl.input}>
 				<TextareaAutosize
+					className={cl.textarea}
 					ref={textAreaReference}
 					onFocus={() => setTextareaFocused(true)}
 					onBlur={() => setTextareaFocused(false)}
@@ -92,26 +99,34 @@ const PostForm = () => {
 				>
 					<i className={`bi bi-emoji-smile${showEmojiPicker ? "-fill" : ""}`}></i>
 					{showEmojiPicker &&
-						<div
-							style={{
-								position: 'absolute',
-								right: 10,
-								// bottom: 0,
-								top: textAreaReference.current.offsetHeight + 50,
-								zIndex: 2,
-								display: "flex",
-								alignItems: "center",
-								justifyContent: "right",
-								marginRight: 10
-							}}
-							onClick={event => event.stopPropagation()}
-						>
-							<Picker
-								data={data}
-								onEmojiSelect={(element) => setPostMessage(previous => previous + element.native)}
-								theme="light"
-								locale="ru"/>
-						</div>
+						<Draggable>
+							<div
+								style={{
+									position: 'absolute',
+									right: 10,
+									// bottom: 0,
+									top: textAreaReference.current.offsetHeight + 50,
+									zIndex: 2,
+									display: "flex",
+									alignItems: "center",
+									justifyContent: "right",
+									marginRight: 10,
+									padding: 10,
+									backgroundColor: 'lightgray',
+									borderRadius: 10,
+									boxShadow: 'black 0 0 50px 10px',
+									cursor: 'pointer'
+								}}
+								onClick={event => event.stopPropagation()}
+							>
+								<Picker
+									data={data}
+									onEmojiSelect={(element) => setPostMessage(previous => previous + element.native)}
+									theme="light"
+									locale="ru"
+								/>
+							</div>
+						</Draggable>
 					}
 				</button>
 
@@ -128,9 +143,10 @@ const PostForm = () => {
 					<i className="bi bi-image"></i>
 				</label>
 			</div>
-			{((textareaFocused && postMessage) || files.length > 0) &&
-				<button type="submit">Поделиться</button>
-			}
+			<button type="submit"
+							style={{display: !(textareaFocused || postMessage || files.length > 0) && "none"}}>
+				Поделиться
+			</button>
 		</form>
 	);
 };
