@@ -15,12 +15,6 @@
     width: 15px;
     border-radius: 50%;
     transition: all 500ms;
-    /*animation-name: smooth-appear-status;*/
-    /*animation-duration: 0.5s;*/
-    /*animation-fill-mode: forwards;*/
-    /*animation-direction: reverse;*/
-    /*animation-timing-function: ease-in-out;*/
-    /*animation-iteration-count: 1;*/
     border: 2px solid #559955;
 }
 
@@ -37,25 +31,14 @@
     width: auto;
     padding: 0 10px;
     animation-name: smooth-appear-status;
-    /*animation-duration: 0.5s;*/
-    /*animation-direction: normal;*/
-    /*animation-fill-mode: forwards;*/
-    /*animation-timing-function: ease-in-out;*/
-    /*animation-iteration-count: 1;*/
 }
 
 .online p {
     font-size: 10px;
     line-height: 1rem;
-    display: none;
-    transition: all 250ms;
-    /*animation-name: smooth-appear-status-text;*/
-    /*animation-timing-function: ease-in-out;*/
-    /*animation-delay: 0.3s;*/
-    /*animation-duration: 0.1s;*/
-    /*animation-direction: reverse;*/
-    /*animation-fill-mode: forwards;*/
-    /*animation-iteration-count: 1;*/
+    /*display: none;*/
+    color: transparent;
+    transition: color 0ms;
 }
 
 .offline p {
@@ -66,13 +49,7 @@
 .online:hover p {
     display: block;
     color: white;
-    animation-name: smooth-appear-status-text;
-    /*animation-timing-function: ease-in-out;*/
-    /*animation-delay: 0.3s;*/
-    /*animation-duration: 0.1s;*/
-    /*animation-fill-mode: forwards;*/
-    /*animation-direction: normal;*/
-    /*animation-iteration-count: 1;*/
+    /*animation: smooth-appear-text;*/
 }
 
 .no_hover {
@@ -101,11 +78,11 @@
     }
 }
 
-@keyframes smooth-appear-status-text {
+@keyframes smooth-appear-text {
     from {
-        display: none;
+        color: transparent;
     }
     to {
-        display: block;
+        color: white
     }
 }

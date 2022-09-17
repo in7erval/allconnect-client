@@ -10,6 +10,10 @@
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",
     "@types/axios": "0.14.0",
+    "@types/jest": "^29.0.3",
+    "@types/node": "^18.7.18",
+    "@types/react": "^18.0.20",
+    "@types/react-dom": "^18.0.6",
     "axios": "^0.27.2",
     "bootstrap-icons": "1.9.1",
     "browser-image-compression": "^2.0.0",
@@ -31,6 +35,7 @@
     "react-textarea-autosize": "8.3.4",
     "react-transition-group": "^4.4.2",
     "socket.io-client": "4.5.1",
+    "typescript": "^4.8.3",
     "universal-cookie": "4.0.4",
     "web-vitals": "^2.1.4",
     "workbox-background-sync": "^6.5.4",
@@ -50,48 +55,8 @@
     "start": "BROWSER=none HTTPS=true SSL_CRT_FILE=./sslcerts/certificate.crt SSL_KEY_FILE=./sslcerts/private.key react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "env": {
-      "es2022": true,
-      "browser": true,
-      "node": true
-    },
-    "parserOptions": {
-      "ecmaVersion": "latest",
-      "sourceType": "module"
-    },
-    "plugins": [
-      "unicorn"
-    ],
-    "extends": [
-      "plugin:unicorn/recommended",
-      "eslint:recommended",
-      "plugin:react/recommended",
-      "plugin:react/jsx-runtime"
-    ],
-    "rules": {
-      "unicorn/better-regex": "error",
-      "unicorn/no-null": "warn",
-      "unicorn/filename-case": [
-        "error",
-        {
-          "cases": {
-            "camelCase": true,
-            "pascalCase": true
-          }
-        }
-      ],
-      "unicorn/prevent-abbreviations": "error",
-      "no-unused-vars": [
-        "error",
-        {
-          "argsIgnorePattern": "^_",
-          "varsIgnorePattern": "^_"
-        }
-      ]
-    }
+    "eject": "react-scripts eject",
+    "lint": "eslint . --ext ts"
   },
   "browserslist": {
     "production": [
@@ -106,9 +71,12 @@
     ]
   },
   "devDependencies": {
-    "@tanstack/react-query-devtools": "^4.2.3",
-    "eslint": "^8.22.0",
+    "@tanstack/react-query-devtools": "4.2.3",
+    "@typescript-eslint/eslint-plugin": "^5.37.0",
+    "@typescript-eslint/parser": "^5.37.0",
+    "eslint": "8.22.0",
     "eslint-plugin-react": "^7.30.1",
-    "eslint-plugin-unicorn": "^43.0.2"
+    "eslint-plugin-unicorn": "^43.0.2",
+    "typescript-plugin-css-modules": "^3.4.0"
   }
 }

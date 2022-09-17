@@ -4,7 +4,7 @@ import UserService from "../../API/UserService";
 import PostList from "../../components/Post/PostList";
 import userpic from "../../assets/userpic.jpeg";
 import cl from "./UserPage.module.css";
-import PostForm from "../../components/Post/PostForm/PostForm.jsx";
+import PostForm from "../../components/Post/PostForm/PostForm.tsx";
 import Status from "../../components/UI/Status/Status";
 import {useInView} from "react-intersection-observer";
 import {useInfiniteQuery, useQuery} from "@tanstack/react-query";
@@ -269,10 +269,7 @@ const UserPage = () => {
 						</div>
 						{isLoadingPosts ? <LoaderPostList/> : postsData.pages.map((group, index) => (
 							<React.Fragment key={index}>
-								<PostList
-									remove={() => console.log("remove")}
-									posts={group.data.body}
-								/>
+								<PostList posts={group.data.body}/>
 							</React.Fragment>
 						))}
 						<div ref={lastElement} style={{height: 20}}/>

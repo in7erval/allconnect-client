@@ -52,10 +52,7 @@ function Posts() {
 			{isLoading ? <LoaderPostList/> :
 				data.pages.map((group, index) => (
 					<React.Fragment key={index}>
-						<PostList
-							remove={() => console.log("remove")}
-							posts={group.data.body}
-						/>
+						<PostList posts={group.data.body}/>
 					</React.Fragment>
 				))
 			}
