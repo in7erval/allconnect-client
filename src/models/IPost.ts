@@ -1,7 +1,7 @@
 import IUser from "./IUser";
 import IComment from "./IComment";
 
-export default interface IPost {
+interface IPostDefault {
     _id: string,
     image?: string | null;
     likes: IUser[] | string[];
@@ -9,4 +9,19 @@ export default interface IPost {
     owner: IUser;
     comments: IComment[] | string[];
     publishDate: string;
+}
+
+export default interface IPost extends IPostDefault {
+    likes: IUser[];
+    comments: IComment[];
+}
+
+export interface IPostLikes extends IPostDefault {
+    likes: IUser[];
+    comments: string[];
+}
+
+export interface IPostComments extends IPostDefault {
+    likes: string[];
+    comments: IComment[];
 }

@@ -36,6 +36,7 @@ const Message: FC<MessageProperties>
        }) => {
     const {store, storeModalImage} = useContext(Context);
     const userId = store.userId;
+    if (userId === undefined) return <div>Error: userId is undefined</div>;
 
     const {ref: reference, inView: isVisible} = useInView({
         threshold: 0.5,

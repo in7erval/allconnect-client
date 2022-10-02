@@ -30,6 +30,9 @@
 	<meta name="description" content="Next generation social platform"/>
 	<link rel="apple-touch-icon" href="%PUBLIC_URL%/logo512x512.png"/>
 	<link rel="manifest" href="%PUBLIC_URL%/manifest.json"/>
+	<% if (htmlWebpackPlugin.options.isReactIdeDevmode) { %>
+	<script src="%PUBLIC_URL%/static/js/devtools-no-server.js"></script>
+	<% } %>
 </head>
 <body>
 <noscript>You need to enable JavaScript to run this app.</noscript>

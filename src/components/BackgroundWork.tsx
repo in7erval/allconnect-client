@@ -8,6 +8,7 @@ import NotificationService from "../API/NotificationService";
 const BackgroundWork = () => {
 	const {store} = useContext(Context);
 	const loggedUserId = store.userId;
+	if (loggedUserId === undefined) return <div>Error: loggedUserId is undefined</div>
 	const LIMIT_NOTIFICATIONS = 1000;
 
 	const {users} = useUser(loggedUserId);

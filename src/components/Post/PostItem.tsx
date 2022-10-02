@@ -11,16 +11,17 @@ import {observer} from "mobx-react-lite";
 import LoadingImage from "../UI/LoadingImage/LoadingImage";
 import LoaderForUserPic from "../UI/Loader/LoaderForUserPic";
 import LoaderForImage from "../UI/Loader/LoaderForImage";
-import IPost from "../../models/IPost";
+import {IPostComments} from "../../models/IPost";
 
 interface PostItemProperties {
-    post: IPost;
+    post: IPostComments;
 }
 
 const PostItem: FC<PostItemProperties> = ({post}) => {
 
     const {store, storeModalImage, storePosts} = useContext(Context);
     const loggedUserId = store.userId;
+    if (loggedUserId === undefined) return <div>Error: loggedUserId is undefined</div>;
     const [showComments, setShowComments] = useState(false);
     const [isOwner, setIsOwner] = useState(false);
     const [invertHeartIcon, setInvertHeartIcon] = useState(false); //fixme: это дно, пофикси
@@ -83,15 +84,16 @@ const PostItem: FC<PostItemProperties> = ({post}) => {
 												src={post.image}
 												alt="Pic"
 												showWhenLoading={<LoaderForImage/>}
-												onClick={() =>
-                            storeModalImage.initModal(post.image,
-                                {
-                                    firstName: post.owner.firstName,
-                                    lastName: post.owner.lastName,
-                                    id: post.owner._id,
-                                    picture: post.owner.picture
-                                })
-                        }
+												onClick={() => {
+                            if (post.image)
+                                storeModalImage.initModal(post.image,
+                                    {
+                                        firstName: post.owner.firstName,
+                                        lastName: post.owner.lastName,
+                                        id: post.owner._id,
+                                        picture: post.owner.picture
+                                    });
+                        }}
 											/>}
                     <div>
                         {post.text}

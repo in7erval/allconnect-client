@@ -7,10 +7,11 @@ import Status from "../../../../components/UI/Status/Status";
 import TextareaAutosize from "react-textarea-autosize";
 import UserService from "../../../../API/UserService";
 import {Context} from "../../../../index";
-import MyModal from "../../../../components/UI/MyModal/MyModal";
+import DefaultModal from "../../../../components/UI/DefaultModal/DefaultModal";
 import ImageUploader from "../../../../components/UI/ImageUploader/ImageUploader";
 import UserPageEditor from "./UserPageEditor";
 import IUser from "../../../../models/IUser";
+import TelegramConnector from "../../../../components/TelegramConnector/TelegramConnector";
 
 const userpic = require("../../../../assets/userpic.jpeg");
 
@@ -38,11 +39,13 @@ const UserPageInfo: FC<UserPageInfoProperties> =
         const pageUserId: string | undefined = useParams().id;
         if (pageUserId === undefined) return <div>Ошибка: pageUserId is undefined</div>
         const loggedUserId = store.userId;
+        if (loggedUserId === undefined) return <div>Error: loggedUserId is undefined</div>
         const isOwner = pageUserId === loggedUserId;
         const [textStatus, setTextStatus] = useState(userData.textStatus ?? (isOwner ? `На чиле... Или напиши свой "статус"` : ""));
         const [editTextStatus, setEditTextStatus] = useState(false);
         const [isFriend, setIsFriend] = useState(_isFriend);
         const [showPageEditor, setShowPageEditor] = useState(false);
+        const [showConnectTelegram, setShowConnectTelegram] = useState(false);
 
         useEffect(() => {
             setTextStatus(userData.textStatus ?? (isOwner ? `На чиле... Или напиши свой "статус"` : ""));
@@ -88,9 +91,13 @@ const UserPageInfo: FC<UserPageInfoProperties> =
 														<button onClick={() => setShowImageUploader(true)} className={cl.user_button}>
 															Загрузить фото
 														</button>
+														<button onClick={() => setShowConnectTelegram(true)} className={cl.user_button}>
+															Привязать Telegram
+														</button>
 														<button onClick={() => setShowPageEditor(true)} className={cl.btn_without_background}>
 															Редактировать страницу
 														</button>
+
 													</>
                         }
                         {!isOwner &&
@@ -189,7 +196,7 @@ const UserPageInfo: FC<UserPageInfoProperties> =
                 {isOwner &&
                     // todo: сделать одну модалку с разным контентом!
 									<>
-										<MyModal
+										<DefaultModal
 											visible={showImageUploader}
 											setVisible={setShowImageUploader}
 										>
@@ -197,13 +204,18 @@ const UserPageInfo: FC<UserPageInfoProperties> =
 												setModalVisible={setShowImageUploader}
 												currentImg={userData.picture ?? userpic}
 											/>
-										</MyModal>
-										<MyModal
+										</DefaultModal>
+										<DefaultModal
 											visible={showPageEditor}
 											setVisible={setShowPageEditor}
 										>
 											<UserPageEditor/>
-										</MyModal>
+										</DefaultModal>
+										<DefaultModal
+											visible={showConnectTelegram}
+                                            setVisible={setShowConnectTelegram}>
+                                            <TelegramConnector setModalVisible={setShowConnectTelegram}/>
+										</DefaultModal>
 									</>
                 }
             </div>

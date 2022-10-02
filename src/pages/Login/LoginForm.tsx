@@ -1,6 +1,7 @@
 import cl from './Login.module.css';
 import React, {FC, useContext, useRef, useState} from "react";
 import {Context} from "../../index";
+import Input from "../../components/Input/Input";
 
 interface LoginFormProperties {
     setIsRegistrationOpen: (_value: boolean) => void;
@@ -46,7 +47,7 @@ const LoginForm: FC<LoginFormProperties> = ({setIsRegistrationOpen}) => {
             </div>
             <form className={cl.login_form} onSubmit={sendData}>
                 <div className={cl.login_form__input_group}>
-                    <input
+                    <Input
                         id="email"
                         type="email"
                         autoFocus={true}
@@ -59,14 +60,15 @@ const LoginForm: FC<LoginFormProperties> = ({setIsRegistrationOpen}) => {
                 </div>
                 <div className={cl.login_form__input_group}
                      style={{flexDirection: "row", justifyContent: "space-between"}}>
-                    <input
+                    <Input
                         id="current-password"
                         placeholder="Пароль"
                         required={true}
+                        autoFocus={false}
+                        autoComplete="password"
                         type={passwordVisible ? "text" : "password"}
                         onChange={event_ => setPassword(event_.target.value)}
                         value={password}
-                        style={{flex: 1}}
                     />
                     <div
                         onClick={() => setPasswordVisible(!passwordVisible)}

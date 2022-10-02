@@ -68,6 +68,9 @@ const MessageRoom = () => {
     }
     const {store} = useContext(Context);
     const loggedUserId = store.userId;
+    if (loggedUserId === undefined) {
+        return <div>Error! loggedUserId is undefined</div>;
+    }
     const [id1, id2] = parseMessageRoomId(pageId);
     const toUserId: string = (loggedUserId === id1) ? id2 : id1;
 

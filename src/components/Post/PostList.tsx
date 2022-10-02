@@ -1,9 +1,9 @@
 import PostItem from "./PostItem";
-import IPost from "../../models/IPost";
+import {IPostComments} from "../../models/IPost";
 import {FC} from "react";
 
 interface PostListProperties {
-    posts: IPost[],
+    posts: IPostComments[],
 }
 
 const PostList: FC<PostListProperties> = ({posts}) => {

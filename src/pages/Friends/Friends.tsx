@@ -6,7 +6,7 @@ const userpic = require("../../assets/userpic.jpeg");
 import cl from "./Friends.module.css";
 
 import Loader from "../../components/UI/Loader/Loader";
-import MyModal from "../../components/UI/MyModal/MyModal";
+import DefaultModal from "../../components/UI/DefaultModal/DefaultModal";
 import MessageInput from "../../components/Message/MessageInput";
 import MessageService from "../../API/MessageService";
 import {Link, useParams} from "react-router-dom";
@@ -22,6 +22,7 @@ const createRoomId = (firstId: string, secondId: string): string => firstId > se
 const Friends = () => {
     const {store} = useContext(Context);
     const loggedUserId = store.userId;
+    if (loggedUserId === undefined) return <div>Error: loggedUserId is undefined</div>;
     const parameters = useParams();
     const pageUserId = parameters.id ?? loggedUserId;
 
@@ -145,7 +146,7 @@ const Friends = () => {
 
                 </div>
             }
-            <MyModal setVisible={setVisibleModal} visible={visibleModal}>
+            <DefaultModal setVisible={setVisibleModal} visible={visibleModal}>
                 {friendTo !== null ?
                     <div className={cl.modal}>
                         <Link to={`/user${friendTo._id}`}>
@@ -173,7 +174,7 @@ const Friends = () => {
                     :
                     <div>Пользователь не определён</div>
                 }
-            </MyModal>
+            </DefaultModal>
             {/*<div className={cl.nav}>*/}
             {/*	<ul>*/}
             {/*		<li>Первое</li>*/}

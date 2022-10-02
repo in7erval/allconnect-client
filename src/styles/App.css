@@ -2,7 +2,24 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: "Roboto", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
+
+:root {
+    --background: #eeeeee;
+    --text-primary: black;
+    --text-secondary: royalblue;
+    --accent: purple;
+}
+
+/*[data-theme='dark'] {*/
+/*    --background: black;*/
+/*    --text-primary: white;*/
+/*    --text-secondary: grey;*/
+/*    --accent: darkred;*/
+/*}*/
 
 a {
     text-decoration: none;
@@ -18,7 +35,19 @@ a {
 
 body {
     width: 100%;
-    background-color: #eeeeee;
+    /*background-color: #eeeeee;*/
+    /*background: url("../assets/textured-mulberry-paper.jpg");*/
+    /*background: url("../assets/paper-texture.jpg");*/
+    /*background: url("../assets/white-paper-texture.jpg");*/
+    /*background: url("../assets/sero.jpg");*/
+    /*background: url("../assets/sero2.jpg");*/
+    /*background: url("../assets/karton.jpg");*/
+    /*background: url("../assets/abstrsero.jpg");*/
+    /*background-repeat: no-repeat;*/
+    /*background-attachment: fixed;*/
+    /*background-position: center;*/
+    /*background-color: black;*/
+
 }
 
 #app {
@@ -29,6 +58,7 @@ body {
     font-family: "Roboto", sans-serif;
     width: 100%;
     height: 100%;
+    background-color: var(--background);
 }
 
 .default_page {
@@ -52,6 +82,7 @@ body {
     flex-wrap: wrap;
     flex-direction: column;
     align-items: center;
+    margin-top: 35px;
 }
 
 .clear_bottom_radius {

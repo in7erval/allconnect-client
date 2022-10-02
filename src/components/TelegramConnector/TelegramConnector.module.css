@@ -1,0 +1,144 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 60vw;
+    min-width: 350px;
+    max-width: 500px;
+    margin: -25px;
+}
+
+.header {
+    height: 50px;
+    width: 100%;
+    background-color: #f0f0f0;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom: 1px solid #dadada;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header button {
+    border: none;
+    cursor: pointer;
+}
+
+.header button:hover {
+    background-color: transparent;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+}
+
+.for_what, .how {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    border-bottom: 1px solid lightgrey;
+}
+
+.for_what div, .how div {
+    margin: 10px;
+}
+
+.for_what div:first-child, .how div:first-child {
+    width: 50px;
+    text-align: center;
+}
+
+.for_what div:last-child, .how div:last-child {
+    flex: 1 1 0%;
+}
+
+.how ol li {
+    margin-bottom: 5px;
+    list-style-type: none;
+    list-style-position: outside;
+}
+
+.generate {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+    padding: 10px 20px;
+}
+
+.generate button {
+    outline: none;
+    border: none;
+    background-color: royalblue;
+    font-family: "Roboto", sans-serif;
+    font-size: 1rem;
+    border-radius: 10px;
+    padding: 5px 10px;
+    color: white;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.generate button:hover {
+    background-color: #2a5885;
+}
+
+.generate > div {
+    width: 100%;
+}
+
+.for_token {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.token {
+    font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono", "Droid Sans Mono", monospace, monospace;
+    background-color: #e0e0e0;
+    padding: 2px 5px;
+    justify-self: center;
+}
+
+.icons i {
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+.status_telegram {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.status_telegram p {
+    padding: 5px 10px;
+    border-radius: 10px;
+}
+
+.status_telegram .ok {
+    background-color: #aaffaa;
+}
+
+.status_telegram .not_ok {
+    background-color: #ffaaaa;
+}
+
+.status_telegram a {
+    margin-left: 10px;
+}
+

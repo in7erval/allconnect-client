@@ -1,0 +1,47 @@
+.input {
+    width: 100%;
+    cursor: text;
+    padding: 5px 10px;
+    height: 50px;
+    font-family: "Roboto", sans-serif;
+    background-color: #eeeeee;
+    border-radius: 10px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.input label {
+    cursor: text;
+    width: 100%;
+    font-size: 16px;
+    transition: font-size ease-in-out 100ms;
+    height: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-evenly;
+    flex-direction: column;
+}
+
+.input .small_text {
+    font-size: 12px;
+}
+
+.input input {
+    width: 100%;
+    border: none;
+    outline: none;
+    background-color: #eeeeee;
+    top: 0;
+    bottom: 0;
+    font-size: 16px;
+    height: 0;
+    transition: height ease-in-out 100ms;
+    /*display: none;*/
+}
+
+.input input:focus {
+    height: 100%;
+}
